@@ -43,6 +43,11 @@
                     <OverflowToolbar>
                         <Title text="Stores List" />
                         <ToolbarSpacer/>
+                        <Button
+                            text="Sort"
+                            type="Transparent"
+                            icon="sap-icon://sort"
+                            press=".onSort"/>
                         <Button text="Create" type="Transparent" icon="sap-icon://add" press=".onCreate"/>
                         <Button text="Delete" type="Transparent" icon="sap-icon://delete" press=".onDelete"/>
                     </OverflowToolbar>

@@ -9,6 +9,14 @@
 
         <uxap:headerTitle>
             <uxap:ObjectPageDynamicHeaderTitle>
+                
+                <uxap:breadcrumbs>
+                    <Breadcrumbs>
+                        <Link text="List Report" press=".onNavBack" />
+                        <Link text="{Name}" />
+                    </Breadcrumbs>
+                </uxap:breadcrumbs>
+
                 <uxap:heading>
                     <Title text="{Name}" level="H2"/>
                 </uxap:heading>

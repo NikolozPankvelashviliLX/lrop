@@ -1,0 +1,14 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <ViewSettingsDialog
+        id="sortDialog"
+        confirm=".onSortConfirm"
+        reset=".onSortReset">
+        <sortItems>
+            <ViewSettingsItem text="Name" key="Name" selected="true" />
+            <ViewSettingsItem text="Floor Area" key="FloorArea" />
+            <ViewSettingsItem text="Established Date" key="Established" />
+        </sortItems>
+    </ViewSettingsDialog>
+</core:FragmentDefinition>

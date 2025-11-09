@@ -6,12 +6,22 @@ sap.ui.define(
     "sap/ui/model/FilterOperator",
     "sap/m/MessageBox",
     "sap/m/MessageToast",
+    "sap/ui/core/Fragment",
   ],
-  (Controller, Formatter, Filter, FilterOperator, MessageBox, MessageToast) => {
+  (
+    Controller,
+    Formatter,
+    Filter,
+    FilterOperator,
+    MessageBox,
+    MessageToast,
+    Fragment
+  ) => {
     "use strict";
 
     return Controller.extend("npproj1.controller.ObjectPage", {
       formatter: Formatter,
+      _oEditProductDialog: null,
 
       onInit() {
         const oRouter = this.getOwnerComponent().getRouter();
@@ -90,6 +100,55 @@ sap.ui.define(
             }
           },
         });
+      },
+
+      onEditPress(oEvent) {
+        const oView = this.getView();
+        const oSource = oEvent.getSource();
+        const sPath = oSource.getBindingContext().getPath();
+
+        if (!this._oEditProductDialog) {
+          Fragment.load({
+            id: oView.getId(),
+            name: "npproj1.view.EditProductDialog",
+            controller: this,
+          }).then((oDialog) => {
+            this._oEditProductDialog = oDialog;
+            oView.addDependent(this._oEditProductDialog);
+            this._oEditProductDialog.bindElement(sPath);
+            this._oEditProductDialog.open();
+          });
+        } else {
+          this._oEditProductDialog.bindElement(sPath);
+          this._oEditProductDialog.open();
+        }
+      },
+
+      onSaveEdit() {
+        const oModel = this.getView().getModel();
+
+        this._oEditProductDialog.setBusy(true);
+
+        oModel.submitChanges({
+          success: () => {
+            this._oEditProductDialog.setBusy(false);
+            this._oEditProductDialog.close();
+            MessageToast.show("Product updated successfully.");
+          },
+          error: () => {
+            this._oEditProductDialog.setBusy(false);
+            MessageBox.error("Failed to update the product.");
+          },
+        });
+      },
+
+      onCancelEdit() {
+        const oModel = this.getView().getModel();
+        const sPath = this._oEditProductDialog.getBindingContext().getPath();
+
+        oModel.resetChanges([sPath]);
+
+        this._oEditProductDialog.close();
       },
 
       onNavBack() {

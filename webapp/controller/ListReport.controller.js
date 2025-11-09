@@ -8,6 +8,7 @@ sap.ui.define(
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
     "sap/ui/model/json/JSONModel",
+    "sap/ui/model/Sorter",
   ],
   (
     Controller,
@@ -17,13 +18,15 @@ sap.ui.define(
     MessageBox,
     MessageToast,
     Fragment,
-    JSONModel
+    JSONModel,
+    Sorter
   ) => {
     "use strict";
 
     return Controller.extend("npproj1.controller.ListReport", {
       formatter: Formatter,
       _oCreateDialog: null,
+      _oSortDialog: null,
 
       onInit() {},
 
@@ -178,6 +181,46 @@ sap.ui.define(
         });
       },
 
+      onSort() {
+        const oView = this.getView();
+
+        if (!this._oSortDialog) {
+          Fragment.load({
+            id: oView.getId(),
+            name: "npproj1.view.SortDialog",
+            controller: this,
+          }).then((oDialog) => {
+            this._oSortDialog = oDialog;
+            oView.addDependent(this._oSortDialog);
+            this._oSortDialog.open();
+          });
+        } else {
+          this._oSortDialog.open();
+        }
+      },
+
+      onSortConfirm(oEvent) {
+        const oTable = this.byId("storesTable");
+        const oBinding = oTable.getBinding("items");
+
+        const mParams = oEvent.getParameters();
+        const sPath = mParams.sortItem.getKey();
+        const bDescending = mParams.sortDescending;
+
+        const oSorter = new Sorter(sPath, bDescending);
+        oBinding.sort(oSorter);
+      },
+
+      onSortReset() {
+        const oTable = this.byId("storesTable");
+        const oBinding = oTable.getBinding("items");
+
+        oBinding.sort([]);
+
+        // This does not work, I don't know why
+        this._oSortDialog.close();
+      },
+
       onListItemPress(oEvent) {
         const oModel = this.getView().getModel();
         const oItem = oEvent.getSource();
@@ -185,8 +228,6 @@ sap.ui.define(
 
         // Can we use this somehow here to improve navigation?
         const key = oModel.createKey("/Stores", { ID: sStoreId });
-
-        debugger;
 
         this.getOwnerComponent().getRouter().navTo("RouteObjectPage", {
           StoreID: sStoreId,
