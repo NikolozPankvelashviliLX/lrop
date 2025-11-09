@@ -97,7 +97,6 @@ sap.ui.define(
 
         aItems.forEach((oItem) => {
           const sPath = oItem.getBindingContext().getPath();
-          console.log("Deleting item at path:", sPath);
           oModel.remove(sPath, { batchGroupId: "deleteGroup" });
         });
 

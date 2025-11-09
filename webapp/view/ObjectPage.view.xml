@@ -61,7 +61,7 @@
                                     <OverflowToolbar>
                                         <Title text="Products List"/>
                                         <ToolbarSpacer />
-                                        <SearchField id="productsSearchField" width="auto"/>
+                                        <SearchField id="productsSearchField" width="auto" search=".onProductSearch"/>
                                     </OverflowToolbar>
                                 </headerToolbar>
 
