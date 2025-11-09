@@ -1,7 +1,82 @@
 <mvc:View controllerName="npproj1.controller.ListReport"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    </Page>
 
+    <f:DynamicPage id="ListReportDynamicPageId">
+
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="List Report"/>
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:header>
+            <f:DynamicPageHeader>
+                <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch">
+
+                    <fb:filterGroupItems>
+                        <fb:FilterGroupItem name="SearchFilter" label="Search" groupName="Group1" visibleInFilterBar="true">
+                            <fb:control>
+                                <SearchField id="searchField" width="100%"/>
+                            </fb:control>
+                        </fb:FilterGroupItem>
+
+                        <fb:FilterGroupItem name="DateFilter" label="Date" groupName="Group1" visibleInFilterBar="true">
+                            <fb:control>
+                                <DatePicker id="datePicker"/>
+                            </fb:control>
+                        </fb:FilterGroupItem>
+                    </fb:filterGroupItems>
+
+                </fb:FilterBar>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <Table id="storesTable" mode="MultiSelect" items="{/Stores}" class="sapUiResponsiveMargin" width="auto">
+
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <Title text="Stores List" />
+                        <ToolbarSpacer/>
+                        <Button text="Create" type="Transparent" icon="sap-icon://add" press=".onCreate"/>
+                        <Button text="Delete" type="Transparent" icon="sap-icon://delete" press=".onDelete"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+
+                <columns>
+                    <Column>
+                        <Text text="Name"/>
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                        <Text text="Store Floor Area"/>
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+                        <Text text="Date"/>
+                    </Column>
+                </columns>
+
+                <items>
+                    <ColumnListItem type="Navigation" press=".onListItemPress">
+                        <cells>
+                            <ObjectIdentifier title="{StoreName}" text="{Name}"/>
+
+                            <ObjectNumber number="{path: 'FloorArea', formatter: '.formatter.formatFloorArea'}" unit="ft" state="{= ${FloorArea} > 5000 ? 'Success' : ${FloorArea} > 3000 ? 'Information' : 'Error' }"/>
+
+                            <Text text="{
+                                    path: 'Established',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: { style: 'long' }
+                                }"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+
+    </f:DynamicPage>
 </mvc:View>
