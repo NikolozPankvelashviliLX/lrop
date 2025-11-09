@@ -16,5 +16,12 @@ sap.ui.define([], function () {
       }
       return Number(area).toLocaleString();
     },
+
+    formatCurrency: (value) => {
+      if (value == null) {
+        return "";
+      }
+      return Number(value).toLocaleString();
+    },
   };
 });

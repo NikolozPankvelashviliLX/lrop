@@ -1,0 +1,45 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog
+        id="createDialog"
+        title="Create New Store"
+        contentWidth="25rem">
+        <content>
+            <f:SimpleForm
+                editable="true"
+                layout="ResponsiveGridLayout">
+                
+                <Label text="Name" required="true"/>
+                <Input id="nameInput" value="{newStore>/Name}" required="true"/>
+                
+                <Label text="Floor Area (ft)" required="true"/>
+                <Input id="floorAreaInput"
+                       value="{newStore>/FloorArea}"
+                       type="Number"
+                       required="true"
+                       />
+                
+                <Label text="Established Date" required="true"/>
+                <DatePicker id="dateInput"
+                            value="{newStore>/Established}"
+                            valueFormat="yyyy-MM-ddTHH:mm:ss"
+                            displayFormat="long"
+                            required="true"
+                            />
+            </f:SimpleForm>
+        </content>
+        <beginButton>
+            <Button
+                text="Save"
+                type="Emphasized"
+                press=".onSaveCreate"/>
+        </beginButton>
+        <endButton>
+            <Button
+                text="Cancel"
+                press=".onCancelCreate"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

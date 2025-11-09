@@ -92,12 +92,21 @@
           "name": "RouteListReport",
           "pattern": ":?query:",
           "target": ["TargetListReport"]
+        },
+        {
+          "name": "RouteObjectPage",
+          "pattern": "StoreDetails/{StoreID}",
+          "target": ["TargetObjectPage"]
         }
       ],
       "targets": {
         "TargetListReport": {
           "id": "ListReport",
           "name": "ListReport"
+        },
+        "TargetObjectPage": {
+          "id": "ObjectPage",
+          "name": "ObjectPage"
         }
       }
     },
