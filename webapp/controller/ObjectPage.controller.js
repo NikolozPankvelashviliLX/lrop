@@ -118,18 +118,21 @@ sap.ui.define(
         const oBindingContext = oSource.getBindingContext();
         const oModel = oBindingContext.getModel();
         const sDeletePath = oBindingContext.getPath();
+        const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
-        MessageBox.warning("Are you sure you want to delete this product?", {
+        MessageBox.warning(oBundle.getText("cofirmDeleteProductMessage"), {
           actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
           emphasizedAction: MessageBox.Action.DELETE,
           onClose: (sAction) => {
             if (sAction === MessageBox.Action.DELETE) {
               oModel.remove(sDeletePath, {
                 success: () => {
-                  MessageToast.show("Product deleted successfully.");
+                  MessageToast.show(oBundle.getText("productDeletedMessage"));
                 },
                 error: () => {
-                  MessageBox.error("Failed to delete the product.");
+                  MessageBox.error(
+                    oBundle.getText("productDeleteErrorMessage")
+                  );
                 },
               });
             }
@@ -174,17 +177,19 @@ sap.ui.define(
       onSaveEdit() {
         const oModel = this.getView().getModel();
 
+        const oBundle = this.getView().getModel("i18n").getResourceBundle();
+
         this._oEditProductDialog.setBusy(true);
 
         oModel.submitChanges({
           success: () => {
             this._oEditProductDialog.setBusy(false);
             this._oEditProductDialog.close();
-            MessageToast.show("Product updated successfully.");
+            MessageToast.show(oBundle);
           },
           error: () => {
             this._oEditProductDialog.setBusy(false);
-            MessageBox.error("Failed to update the product.");
+            MessageBox.error(oBundle.getText("productEditErrorMessage"));
           },
         });
       },

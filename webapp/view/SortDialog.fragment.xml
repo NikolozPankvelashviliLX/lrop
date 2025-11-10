@@ -6,9 +6,9 @@
         confirm=".onSortConfirm"
         reset=".onSortReset">
         <sortItems>
-            <ViewSettingsItem text="Name" key="Name" selected="true" />
-            <ViewSettingsItem text="Floor Area" key="FloorArea" />
-            <ViewSettingsItem text="Established Date" key="Established" />
+            <ViewSettingsItem text="{i18n>name}" key="Name" selected="true" />
+            <ViewSettingsItem text="{i18n>floorArea}" key="FloorArea" />
+            <ViewSettingsItem text="{i18n>establishedDate}" key="Established" />
         </sortItems>
     </ViewSettingsDialog>
 </core:FragmentDefinition>

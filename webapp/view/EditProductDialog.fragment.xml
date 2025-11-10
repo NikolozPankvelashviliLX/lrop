@@ -4,26 +4,26 @@
     xmlns:f="sap.ui.layout.form">
     <Dialog
         id="editProductDialog"
-        title="Edit Product"
+        title="{i18n>editProduct}"
         contentWidth="25rem">
         <content>
             <f:SimpleForm
                 editable="true"
                 layout="ResponsiveGridLayout">
                 
-                <Label text="Product Name" required="true"/>
+                <Label text="{i18n>name}" required="true"/>
                 <Input id="nameEditInput" value="{Name}"/>
                 
-                <Label text="Specs" />
+                <Label text="{i18n>specs}" />
                 <TextArea rows="4" id="specsEditInput" value="{Specs}"/>
 
-                <Label text="Supplier Info" />
+                <Label text="{i18n>supplierInfo}" />
                 <TextArea rows="4" id="supplierEditInput" value="{SupplierInfo}"/>
                 
-                <Label text="Price" />
+                <Label text="{i18n>price}" />
                 <Input value="{Price_amount}" />
 
-                <Label text="Rating" />
+                <Label text="{i18n>rating}" />
                 <RatingIndicator 
                     id="ratingEditInput"
                     value="{Rating}"
@@ -33,13 +33,13 @@
         </content>
         <beginButton>
             <Button
-                text="Save"
+                text="{i18n>save}"
                 type="Emphasized"
                 press=".onSaveEdit"/>
         </beginButton>
         <endButton>
             <Button
-                text="Cancel"
+                text="{i18n>cancel}"
                 press=".onCancelEdit"/>
         </endButton>
     </Dialog>

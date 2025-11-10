@@ -106,13 +106,16 @@ sap.ui.define(
       onDelete() {
         const oTable = this.byId("storesTable");
         const aSelectedItems = oTable.getSelectedItems();
+        const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
         if (aSelectedItems.length === 0) {
-          MessageToast.show("Please select at least one item to delete.");
+          MessageToast.show(oBundle.getText("zeroSelectedDeleteMessage"));
           return;
         }
 
-        const sMessage = `Are you sure you want to delete ${aSelectedItems.length} item(s)?`;
+        const sMessage = oBundle.getText("confirmDeleteMessage", [
+          aSelectedItems.length,
+        ]);
 
         MessageBox.warning(sMessage, {
           actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
@@ -133,6 +136,8 @@ sap.ui.define(
       _performDelete(aItems) {
         const oModel = this.getView().getModel();
 
+        const oBundle = this.getView().getModel("i18n").getResourceBundle();
+
         oModel.setUseBatch(true);
 
         aItems.forEach((oItem) => {
@@ -142,10 +147,12 @@ sap.ui.define(
 
         oModel.submitChanges({
           success: () => {
-            MessageToast.show("Item(s) deleted successfully.");
+            MessageToast.show(
+              oBundle.getText("deleteSuccessMessage", [aItems.length])
+            );
           },
           error: () => {
-            MessageBox.error("An error occurred while deleting the items.");
+            MessageBox.error(oBundle.getText("deleteErrorMessage"));
           },
         });
 
@@ -209,7 +216,7 @@ sap.ui.define(
           !oNewStoreData.FloorArea ||
           !oNewStoreData.Established
         ) {
-          MessageToast.show("Please fill all required fields.");
+          MessageToast.show(oBundle.getText("fillRequiredFieldsMessage"));
           return;
         }
 
@@ -225,11 +232,11 @@ sap.ui.define(
 
         oModel.create("/Stores", oPayload, {
           success: () => {
-            MessageToast.show("Store created successfully.");
+            MessageToast.show(oBundle.getText("storeCreateSuccessMessage"));
             this._oCreateDialog.close();
           },
           error: () => {
-            MessageBox.error("An error occurred while creating the store.");
+            MessageBox.error(oBundle.getText("storeCreateErrorMessage"));
           },
         });
       },

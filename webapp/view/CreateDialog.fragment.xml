@@ -4,24 +4,24 @@
     xmlns:f="sap.ui.layout.form">
     <Dialog
         id="createDialog"
-        title="Create New Store"
+        title="{i18n>createNewStore}"
         contentWidth="25rem">
         <content>
             <f:SimpleForm
                 editable="true"
                 layout="ResponsiveGridLayout">
                 
-                <Label text="Name" required="true"/>
+                <Label text="{i18n>name}" required="true"/>
                 <Input id="nameInput" value="{newStore>/Name}" required="true"/>
                 
-                <Label text="Floor Area (ft)" required="true"/>
+                <Label text="{i18n>floorAreaWithUnit}" required="true"/>
                 <Input id="floorAreaInput"
                        value="{newStore>/FloorArea}"
                        type="Number"
                        required="true"
                        />
                 
-                <Label text="Established Date" required="true"/>
+                <Label text="{i18n>establishedDate}" required="true"/>
                 <DatePicker id="dateInput"
                             value="{newStore>/Established}"
                             valueFormat="yyyy-MM-ddTHH:mm:ss"
@@ -32,13 +32,13 @@
         </content>
         <beginButton>
             <Button
-                text="Save"
+                text="{i18n>save}"
                 type="Emphasized"
                 press=".onSaveCreate"/>
         </beginButton>
         <endButton>
             <Button
-                text="Cancel"
+                text="{i18n>cancel}"
                 press=".onCancelCreate"/>
         </endButton>
     </Dialog>

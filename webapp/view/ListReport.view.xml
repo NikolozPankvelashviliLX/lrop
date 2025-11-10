@@ -9,7 +9,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="List Report"/>
+                    <Title text="{i18n>listReport}"/>
                 </f:heading>
             </f:DynamicPageTitle>
         </f:title>
@@ -19,13 +19,13 @@
                 <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch">
 
                     <fb:filterGroupItems>
-                        <fb:FilterGroupItem name="SearchFilter" label="Search" groupName="Group1" visibleInFilterBar="true">
+                        <fb:FilterGroupItem name="SearchFilter" label="{i18n>search}" groupName="Group1" visibleInFilterBar="true">
                             <fb:control>
                                 <SearchField id="searchField" width="100%"/>
                             </fb:control>
                         </fb:FilterGroupItem>
 
-                        <fb:FilterGroupItem name="DateFilter" label="Date" groupName="Group1" visibleInFilterBar="true">
+                        <fb:FilterGroupItem name="DateFilter" label="{i18n>Date}" groupName="Group1" visibleInFilterBar="true">
                             <fb:control>
                                 <DatePicker id="datePicker"/>
                             </fb:control>
@@ -41,27 +41,27 @@
 
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="Stores List" />
+                        <Title text="{i18n>storeList}" />
                         <ToolbarSpacer/>
                         <Button
-                            text="Sort"
+                            text="{i18n>sort}"
                             type="Transparent"
                             icon="sap-icon://sort"
                             press=".onSort"/>
-                        <Button text="Create" type="Transparent" icon="sap-icon://add" press=".onCreate"/>
-                        <Button text="Delete" type="Transparent" icon="sap-icon://delete" press=".onDelete"/>
+                        <Button text="{i18n>create}" type="Transparent" icon="sap-icon://add" press=".onCreate"/>
+                        <Button text="{i18n>delete}" type="Transparent" icon="sap-icon://delete" press=".onDelete"/>
                     </OverflowToolbar>
                 </headerToolbar>
 
                 <columns>
                     <Column>
-                        <Text text="Name"/>
+                        <Text text="{i18n>name}"/>
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
-                        <Text text="Store Floor Area"/>
+                        <Text text="{i18n>floorArea}"/>
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
-                        <Text text="Date"/>
+                        <Text text="{i18n>date}"/>
                     </Column>
                 </columns>
 

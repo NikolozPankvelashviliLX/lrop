@@ -12,7 +12,7 @@
                 
                 <uxap:breadcrumbs>
                     <Breadcrumbs>
-                        <Link text="List Report" press=".onNavBack" />
+                        <Link text="{i18n>listReport}" press=".onNavBack" />
                         <Link text="{Name}" />
                     </Breadcrumbs>
                 </uxap:breadcrumbs>
@@ -24,29 +24,29 @@
         </uxap:headerTitle>
 
         <uxap:headerContent>
-            <ObjectAttribute title="Address" text="{Address}" />
+            <ObjectAttribute title="{i18n>address}" text="{Address}" />
         </uxap:headerContent>
 
         <uxap:sections>
 
-            <uxap:ObjectPageSection title="Basic Info">
+            <uxap:ObjectPageSection title="{i18n>basicInfo}">
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection>
                         <uxap:blocks>
                             <l:HorizontalLayout>
                                 <f:SimpleForm layout="ResponsiveGridLayout">
-                                    <Label text="Store Name" />
+                                    <Label text="{i18n>name}" />
                                     <Text text="{Name}" />
 
-                                    <Label text="Floor Area" />
+                                    <Label text="{i18n>floorArea}" />
                                     <Text text="{FloorArea} ft" />
 
                                 </f:SimpleForm>
                                 <f:SimpleForm layout="ResponsiveGridLayout">
-                                    <Label text="Phone" />
+                                    <Label text="{i18n>phone}" />
                                     <Text text="{PhoneNumber}" />
 
-                                    <Label text="Established Date" />
+                                    <Label text="{i18n>establishedDate}" />
                                     <Text text="{
                                     path: 'Established',
                                     type: 'sap.ui.model.type.Date',
@@ -59,7 +59,7 @@
                 </uxap:subSections>
             </uxap:ObjectPageSection>
 
-            <uxap:ObjectPageSection title="Products">
+            <uxap:ObjectPageSection title="{i18n>products}">
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection>
                         <uxap:blocks>
@@ -67,7 +67,7 @@
 
                                 <headerToolbar>
                                     <OverflowToolbar>
-                                        <Title text="Products List"/>
+                                        <Title text="{i18n>productsList}"/>
                                         <ToolbarSpacer />
                                         <SearchField id="productsSearchField" width="auto" search=".onProductSearch"/>
                                     </OverflowToolbar>
@@ -75,19 +75,19 @@
 
                                 <columns>
                                     <Column>
-                                        <Text text="Product Name"/>
+                                        <Text text="{i18n>name}"/>
                                     </Column>
                                     <Column>
-                                        <Text text="Specs"></Text>
+                                        <Text text="{i18n>specs}"></Text>
                                     </Column>
                                     <Column>
-                                        <Text text="Supplier Info"></Text>
+                                        <Text text="{i18n>supplierInfo}"></Text>
                                     </Column>
                                     <Column hAlign="Center">
-                                        <Text text="Price"/>
+                                        <Text text="{i18n>price}"/>
                                     </Column>
                                     <Column hAlign="Center">
-                                        <Text text="Rating"/>
+                                        <Text text="{i18n>rating}"/>
                                     </Column>
                                     <Column>
                                     </Column>
