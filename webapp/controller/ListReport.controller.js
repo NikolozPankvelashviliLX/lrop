@@ -24,12 +24,39 @@ sap.ui.define(
     "use strict";
 
     return Controller.extend("npproj1.controller.ListReport", {
+      /**
+       * A reference to the formatter module.
+       * @public
+       */
       formatter: Formatter,
+
+      /**
+       * Stores a reference to the "Create Store" dialog.
+       * @private
+       * @type {sap.m.Dialog | null}
+       */
       _oCreateDialog: null,
+
+      /**
+       * Stores a reference to the "Sort" dialog.
+       * @private
+       * @type {sap.m.ViewSettingsDialog | null}
+       */
       _oSortDialog: null,
 
+      /**
+       * Called when the controller is instantiated.
+       * @public
+       * @override
+       */
       onInit() {},
 
+      /**
+       * Event handler for the filter bar's search event.
+       * Gathers values from the search field and date picker,
+       * creates filters, and applies them to the table binding.
+       * @public
+       */
       onFilterBarSearch() {
         const sSearchValue = this.byId("searchField").getValue();
         const oDateValue = this.byId("datePicker").getDateValue();
@@ -71,6 +98,11 @@ sap.ui.define(
         );
       },
 
+      /**
+       * Event handler for the "Delete" button press.
+       * Checks for selected items and shows a confirmation dialog.
+       * @public
+       */
       onDelete() {
         const oTable = this.byId("storesTable");
         const aSelectedItems = oTable.getSelectedItems();
@@ -93,6 +125,11 @@ sap.ui.define(
         });
       },
 
+      /**
+       * Internal helper method to perform the deletion of items via OData batch request.
+       * @param {sap.m.ListItemBase[]} aItems - An array of table items to be deleted.
+       * @private
+       */
       _performDelete(aItems) {
         const oModel = this.getView().getModel();
 
@@ -115,6 +152,12 @@ sap.ui.define(
         this.byId("storesTable").removeSelections(true);
       },
 
+      /**
+       * Event handler for the "Create" button press.
+       * Lazily loads and opens the "CreateDialog" fragment.
+       * Initializes a JSONModel for the new store data.
+       * @public
+       */
       onCreate() {
         const oView = this.getView();
 
@@ -141,10 +184,20 @@ sap.ui.define(
         }
       },
 
+      /**
+       * Event handler for the "Cancel" button in the create dialog.
+       * Closes the create dialog.
+       * @public
+       */
       onCancelCreate() {
         this._oCreateDialog.close();
       },
 
+      /**
+       * Event handler for the "Save" button in the create dialog.
+       * Validates input fields and sends a create request to the OData service.
+       * @public
+       */
       onSaveCreate() {
         const oModel = this.getView().getModel();
         const oNewStoreData = this._oCreateDialog
@@ -181,6 +234,11 @@ sap.ui.define(
         });
       },
 
+      /**
+       * Event handler for the "Sort" button press.
+       * Lazily loads and opens the "SortDialog" (ViewSettingsDialog) fragment.
+       * @public
+       */
       onSort() {
         const oView = this.getView();
 
@@ -199,6 +257,12 @@ sap.ui.define(
         }
       },
 
+      /**
+       * Event handler for the "confirm" event of the sort dialog.
+       * Applies the selected sorting criteria to the table binding.
+       * @param {sap.ui.base.Event} oEvent - The event object from the sort dialog.
+       * @public
+       */
       onSortConfirm(oEvent) {
         const oTable = this.byId("storesTable");
         const oBinding = oTable.getBinding("items");
@@ -211,6 +275,11 @@ sap.ui.define(
         oBinding.sort(oSorter);
       },
 
+      /**
+       * Event handler for the "reset" event of the sort dialog.
+       * Resets the sorting on the table binding.
+       * @public
+       */
       onSortReset() {
         const oTable = this.byId("storesTable");
         const oBinding = oTable.getBinding("items");
