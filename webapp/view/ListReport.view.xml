@@ -9,7 +9,7 @@
         <f:title>
             <f:DynamicPageTitle>
                 <f:heading>
-                    <Title text="{i18n>listReport}"/>
+                    <Title text="{i18n>listReport}" />
                 </f:heading>
             </f:DynamicPageTitle>
         </f:title>
@@ -21,13 +21,13 @@
                     <fb:filterGroupItems>
                         <fb:FilterGroupItem name="SearchFilter" label="{i18n>search}" groupName="Group1" visibleInFilterBar="true">
                             <fb:control>
-                                <SearchField id="searchField" width="100%"/>
+                                <SearchField id="searchField" width="100%" />
                             </fb:control>
                         </fb:FilterGroupItem>
 
                         <fb:FilterGroupItem name="DateFilter" label="{i18n>Date}" groupName="Group1" visibleInFilterBar="true">
                             <fb:control>
-                                <DatePicker id="datePicker"/>
+                                <DatePicker id="datePicker" />
                             </fb:control>
                         </fb:FilterGroupItem>
                     </fb:filterGroupItems>
@@ -37,46 +37,42 @@
         </f:header>
 
         <f:content>
-            <Table id="storesTable" mode="MultiSelect" items="{/Stores}" class="sapUiResponsiveMargin" width="auto">
+            <Table id="storesTable" mode="MultiSelect" items="{/Stores}" class="sapUiResponsiveMargin" width="auto" selectionChange=".onSelectionChange">
 
                 <headerToolbar>
                     <OverflowToolbar>
                         <Title text="{i18n>storeList}" />
-                        <ToolbarSpacer/>
-                        <Button
-                            text="{i18n>sort}"
-                            type="Transparent"
-                            icon="sap-icon://sort"
-                            press=".onSort"/>
-                        <Button text="{i18n>create}" type="Transparent" icon="sap-icon://add" press=".onCreate"/>
-                        <Button text="{i18n>delete}" type="Transparent" icon="sap-icon://delete" press=".onDelete"/>
+                        <ToolbarSpacer />
+                        <Button text="{i18n>sort}" type="Transparent" icon="sap-icon://sort" press=".onSort" />
+                        <Button text="{i18n>create}" type="Transparent" icon="sap-icon://add" press=".onCreate" />
+                        <Button text="{i18n>delete}" type="Transparent" icon="sap-icon://delete" press=".onDelete" enabled="{appState>/deleteEnabled}" />
                     </OverflowToolbar>
                 </headerToolbar>
 
                 <columns>
                     <Column>
-                        <Text text="{i18n>name}"/>
+                        <Text text="{i18n>name}" />
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
-                        <Text text="{i18n>floorArea}"/>
+                        <Text text="{i18n>floorArea}" />
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
-                        <Text text="{i18n>date}"/>
+                        <Text text="{i18n>date}" />
                     </Column>
                 </columns>
 
                 <items>
                     <ColumnListItem type="Navigation" press=".onListItemPress">
                         <cells>
-                            <ObjectIdentifier title="{StoreName}" text="{Name}"/>
+                            <ObjectIdentifier title="{StoreName}" text="{Name}" />
 
-                            <ObjectNumber number="{path: 'FloorArea', formatter: '.formatter.formatFloorArea'}" unit="ft" state="{= ${FloorArea} > 5000 ? 'Success' : ${FloorArea} > 3000 ? 'Information' : 'Error' }"/>
+                            <ObjectNumber number="{path: 'FloorArea', formatter: '.formatter.formatFloorArea'}" unit="ft" state="{path: 'FloorArea', formatter: '.formatter.formatAreaState'}" />
 
                             <Text text="{
                                     path: 'Established',
                                     type: 'sap.ui.model.type.Date',
                                     formatOptions: { style: 'long' }
-                                }"/>
+                                }" />
                         </cells>
                     </ColumnListItem>
                 </items>

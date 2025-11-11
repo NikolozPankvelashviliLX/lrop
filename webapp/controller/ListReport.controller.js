@@ -19,7 +19,7 @@ sap.ui.define(
     MessageToast,
     Fragment,
     JSONModel,
-    Sorter
+    Sorter,
   ) => {
     "use strict";
 
@@ -49,7 +49,28 @@ sap.ui.define(
        * @public
        * @override
        */
-      onInit() {},
+      onInit() {
+        const oViewModel = new JSONModel({
+          deleteEnabled: false,
+        });
+        this.getView().setModel(oViewModel, "appState");
+      },
+
+      /**
+       * Event handler for the selectionChange event of the table.
+       * This function updates the "deleteEnabled" property in the view model
+       * based on whether any items are currently selected in the table.
+       *
+       * @param {sap.ui.base.Event} oEvent - The selectionChange event object fired by the table.
+       * @public
+       */
+      onSelectionChange(oEvent) {
+        const oTable = oEvent.getSource();
+        const bHasSelection = oTable.getSelectedItems().length > 0;
+        this.getView()
+          .getModel("appState")
+          .setProperty("/deleteEnabled", bHasSelection);
+      },
 
       /**
        * Event handler for the filter bar's search event.
@@ -69,7 +90,7 @@ sap.ui.define(
               path: "Name",
               operator: FilterOperator.Contains,
               value1: sSearchValue,
-            })
+            }),
           );
         }
 
@@ -83,7 +104,7 @@ sap.ui.define(
               operator: FilterOperator.BT,
               value1: oDateValue,
               value2: oDateEnd,
-            })
+            }),
           );
         }
 
@@ -94,7 +115,7 @@ sap.ui.define(
           new Filter({
             filters: aFilters,
             and: true,
-          })
+          }),
         );
       },
 
@@ -148,7 +169,7 @@ sap.ui.define(
         oModel.submitChanges({
           success: () => {
             MessageToast.show(
-              oBundle.getText("deleteSuccessMessage", [aItems.length])
+              oBundle.getText("deleteSuccessMessage", [aItems.length]),
             );
           },
           error: () => {
@@ -165,7 +186,7 @@ sap.ui.define(
        * Initializes a JSONModel for the new store data.
        * @public
        */
-      onCreate() {
+      async onCreate() {
         const oView = this.getView();
 
         const oNewStoreModel = new JSONModel({
@@ -175,20 +196,17 @@ sap.ui.define(
         });
 
         if (!this._oCreateDialog) {
-          Fragment.load({
+          const oDialog = await Fragment.load({
             id: oView.getId(),
             name: "npproj1.view.CreateDialog",
             controller: this,
-          }).then((oDialog) => {
-            this._oCreateDialog = oDialog;
-            oView.addDependent(this._oCreateDialog);
-            this._oCreateDialog.setModel(oNewStoreModel, "newStore");
-            this._oCreateDialog.open();
           });
-        } else {
-          this._oCreateDialog.setModel(oNewStoreModel, "newStore");
-          this._oCreateDialog.open();
+
+          this._oCreateDialog = oDialog;
+          oView.addDependent(this._oCreateDialog);
         }
+        this._oCreateDialog.setModel(oNewStoreModel, "newStore");
+        this._oCreateDialog.open();
       },
 
       /**
@@ -207,6 +225,7 @@ sap.ui.define(
        */
       onSaveCreate() {
         const oModel = this.getView().getModel();
+        const oBundle = this.getView().getModel("i18n").getResourceBundle();
         const oNewStoreData = this._oCreateDialog
           .getModel("newStore")
           .getData();
@@ -302,13 +321,10 @@ sap.ui.define(
         const oItem = oEvent.getSource();
         const sStoreId = oItem.getBindingContext().getProperty("ID");
 
-        // Can we use this somehow here to improve navigation?
-        const key = oModel.createKey("/Stores", { ID: sStoreId });
-
         this.getOwnerComponent().getRouter().navTo("RouteObjectPage", {
           StoreID: sStoreId,
         });
       },
     });
-  }
+  },
 );

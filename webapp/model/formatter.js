@@ -23,5 +23,15 @@ sap.ui.define([], function () {
       }
       return Number(value).toLocaleString();
     },
+
+    formatAreaState: function (iFloorArea) {
+      if (iFloorArea > 5000) {
+        return "Success";
+      } else if (iFloorArea > 3000) {
+        return "Warning";
+      } else {
+        return "Error";
+      }
+    },
   };
 });

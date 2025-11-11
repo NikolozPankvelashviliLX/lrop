@@ -9,7 +9,7 @@
 
         <uxap:headerTitle>
             <uxap:ObjectPageDynamicHeaderTitle>
-                
+
                 <uxap:breadcrumbs>
                     <Breadcrumbs>
                         <Link text="{i18n>listReport}" press=".onNavBack" />
@@ -18,7 +18,7 @@
                 </uxap:breadcrumbs>
 
                 <uxap:heading>
-                    <Title text="{Name}" level="H2"/>
+                    <Title text="{Name}" level="H2" />
                 </uxap:heading>
             </uxap:ObjectPageDynamicHeaderTitle>
         </uxap:headerTitle>
@@ -51,7 +51,7 @@
                                     path: 'Established',
                                     type: 'sap.ui.model.type.Date',
                                     formatOptions: { style: 'long' }
-                                }"/>
+                                    }" />
                                 </f:SimpleForm>
                             </l:HorizontalLayout>
                         </uxap:blocks>
@@ -67,27 +67,27 @@
 
                                 <headerToolbar>
                                     <OverflowToolbar>
-                                        <Title text="{i18n>productsList}"/>
+                                        <Title text="{i18n>productsList}" />
                                         <ToolbarSpacer />
-                                        <SearchField id="productsSearchField" width="auto" search=".onProductSearch"/>
+                                        <SearchField id="productsSearchField" width="auto" search=".onProductSearch" />
                                     </OverflowToolbar>
                                 </headerToolbar>
 
                                 <columns>
                                     <Column>
-                                        <Text text="{i18n>name}"/>
+                                        <Text text="{i18n>name}" />
                                     </Column>
                                     <Column>
-                                        <Text text="{i18n>specs}"></Text>
+                                        <Text text="{i18n>specs}" />
                                     </Column>
                                     <Column>
-                                        <Text text="{i18n>supplierInfo}"></Text>
+                                        <Text text="{i18n>supplierInfo}" />
                                     </Column>
                                     <Column hAlign="Center">
-                                        <Text text="{i18n>price}"/>
+                                        <Text text="{i18n>price}" />
                                     </Column>
                                     <Column hAlign="Center">
-                                        <Text text="{i18n>rating}"/>
+                                        <Text text="{i18n>rating}" />
                                     </Column>
                                     <Column>
                                     </Column>
@@ -96,14 +96,14 @@
                                 <items>
                                     <ColumnListItem>
                                         <cells>
-                                            <ObjectAttribute text="{Name}"/>
-                                            <Text text="{Specs}" maxLines="1" wrapping="false"/>
-                                            <Text text="{SupplierInfo}" maxLines="1" wrapping="false"/>
-                                            <ObjectNumber number="{path: 'Price_amount', formatter: '.formatter.formatCurrency'}" unit="{Price_currency}"/>
-                                            <RatingIndicator value="{Rating}" editable="false" iconSize="1rem"/>
-                                            <HBox justifyContent="End" >
-                                                <Button type="Transparent" icon="sap-icon://edit" press=".onEditPress" class="sapUiTinyMarginEnd"/>
-                                                <Button type="Transparent" icon="sap-icon://delete" press=".onDeletePress"/>
+                                            <ObjectAttribute text="{Name}" />
+                                            <Text text="{Specs}" maxLines="1" wrapping="false" />
+                                            <Text text="{SupplierInfo}" maxLines="1" wrapping="false" />
+                                            <ObjectNumber number="{path: 'Price_amount', formatter: '.formatter.formatCurrency'}" unit="{Price_currency}" />
+                                            <RatingIndicator value="{Rating}" editable="false" iconSize="1rem" />
+                                            <HBox justifyContent="End">
+                                                <Button type="Transparent" icon="sap-icon://edit" press=".onEditPress" class="sapUiTinyMarginEnd" />
+                                                <Button type="Transparent" icon="sap-icon://delete" press=".onDeletePress" />
                                             </HBox>
                                         </cells>
                                     </ColumnListItem>
@@ -115,10 +115,6 @@
             </uxap:ObjectPageSection>
 
         </uxap:sections>
-
-        <uxap:footer>
-            <OverflowToolbar/>
-        </uxap:footer>
 
     </uxap:ObjectPageLayout>
 </mvc:View>

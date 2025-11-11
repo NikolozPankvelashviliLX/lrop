@@ -113,8 +113,8 @@ sap.ui.define(
        * @param {sap.ui.base.Event} oEvent - The press event object.
        * @public
        */
-      onDeletePress(oEvenet) {
-        const oSource = oEvenet.getSource();
+      onDeletePress(oEvent) {
+        const oSource = oEvent.getSource();
         const oBindingContext = oSource.getBindingContext();
         const oModel = oBindingContext.getModel();
         const sDeletePath = oBindingContext.getPath();
