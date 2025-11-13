@@ -264,11 +264,19 @@ sap.ui.define(
           oModel.remove(sPath);
         });
 
+        let sMessage = "";
+
+        if (aItems.length === 1) {
+          sMessage = this.i18n("deleteStoreSuccessSingular", [
+            aItems[0].getBindingContext().getProperty("Name"),
+          ]);
+        } else {
+          sMessage = this.i18n("deleteStoreSuccessPlural", [aItems.length]);
+        }
+
         oModel.submitChanges({
           success: () => {
-            MessageToast.show(
-              this.i18n("deleteSuccessMessage", [aItems.length])
-            );
+            MessageToast.show(sMessage);
           },
           error: () => {
             MessageBox.error(this.i18n("deleteErrorMessage"));

@@ -135,24 +135,29 @@ sap.ui.define(
         const sDeletePath = oBindingContext.getPath();
         const oTable = this.byId("productsTable");
 
-        MessageBox.warning(this.i18n("cofirmDeleteProductMessage"), {
-          actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
-          emphasizedAction: MessageBox.Action.DELETE,
-          onClose: (sAction) => {
-            if (sAction === MessageBox.Action.DELETE) {
-              oTable.setBusy(true);
-              oModel.remove(sDeletePath, {
-                success: () => {
-                  MessageToast.show(this.i18n("productDeletedMessage"));
-                },
-                error: () => {
-                  MessageBox.error(this.i18n("productDeleteErrorMessage"));
-                },
-              });
-              oTable.setBusy(false);
-            }
-          },
-        });
+        MessageBox.warning(
+          this.i18n("cofirmDeleteProductMessage", [
+            oBindingContext.getProperty("Name"),
+          ]),
+          {
+            actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
+            emphasizedAction: MessageBox.Action.DELETE,
+            onClose: (sAction) => {
+              if (sAction === MessageBox.Action.DELETE) {
+                oTable.setBusy(true);
+                oModel.remove(sDeletePath, {
+                  success: () => {
+                    MessageToast.show(this.i18n("productDeletedMessage"));
+                  },
+                  error: () => {
+                    MessageBox.error(this.i18n("productDeleteErrorMessage"));
+                  },
+                });
+                oTable.setBusy(false);
+              }
+            },
+          }
+        );
       },
 
       /**
