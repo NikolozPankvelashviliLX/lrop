@@ -56,16 +56,19 @@ sap.ui.define(
         this.getView().setModel(oViewModel, "appState");
       },
 
+      _getStoresTable() {
+        return this.byId("storesTable");
+      },
+
       /**
        * Event handler for the selectionChange event of the table.
        * This function updates the "deleteEnabled" property in the view model
        * based on whether any items are currently selected in the table.
        *
-       * @param {sap.ui.base.Event} oEvent - The selectionChange event object fired by the table.
        * @public
        */
-      onSelectionChange(oEvent) {
-        const oTable = oEvent.getSource();
+      onSelectionChange() {
+        const oTable = this._getStoresTable();
         const bHasSelection = oTable.getSelectedItems().length > 0;
         this.getView()
           .getModel("appState")
@@ -97,7 +100,7 @@ sap.ui.define(
         );
         const oDateValue = oDatePicker ? oDatePicker.getDateValue() : null;
 
-        const oTable = this.byId("storesTable");
+        const oTable = this._getStoresTable();
         const aColumns = oTable.getColumns();
 
         const aSearchFilters = [];
@@ -173,7 +176,7 @@ sap.ui.define(
        * @public
        */
       onDelete() {
-        const oTable = this.byId("storesTable");
+        const oTable = this._getStoresTable();
         const aSelectedItems = oTable.getSelectedItems();
         const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
@@ -337,7 +340,7 @@ sap.ui.define(
        * @public
        */
       onSortConfirm(oEvent) {
-        const oTable = this.byId("storesTable");
+        const oTable = this._getStoresTable();
         const oBinding = oTable.getBinding("items");
 
         const mParams = oEvent.getParameters();
@@ -354,13 +357,10 @@ sap.ui.define(
        * @public
        */
       onSortReset() {
-        const oTable = this.byId("storesTable");
+        const oTable = this._getStoresTable();
         const oBinding = oTable.getBinding("items");
 
         oBinding.sort([]);
-
-        // This does not work, I don't know why
-        this._oSortDialog.close();
       },
 
       onListItemPress(oEvent) {
