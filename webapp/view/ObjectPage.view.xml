@@ -21,6 +21,11 @@
                 <uxap:heading>
                     <Title text="{Name}" level="H2" />
                 </uxap:heading>
+
+                <uxap:actions>
+                    <Button text="{i18n>delete}" type="Transparent" press=".onDeleteStore" />
+                </uxap:actions>
+
             </uxap:ObjectPageDynamicHeaderTitle>
         </uxap:headerTitle>
 

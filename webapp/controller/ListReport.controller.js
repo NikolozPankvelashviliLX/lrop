@@ -283,7 +283,9 @@ sap.ui.define(
           },
         });
 
-        this.byId("storesTable").removeSelections(true);
+        this.getModel("appState").setProperty("/deleteEnabled", false);
+
+        this._getStoresTable().removeSelections(true);
       },
 
       /**

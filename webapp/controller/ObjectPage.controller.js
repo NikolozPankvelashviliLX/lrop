@@ -123,6 +123,62 @@ sap.ui.define(
       },
 
       /**
+       * Event handler for the global "Delete" button (Delete Store).
+       * asks for confirmation, deletes the store, and navigates back to List Report.
+       * @public
+       */
+      onDeleteStore() {
+        const oView = this.getView();
+        const oContext = oView.getBindingContext();
+
+        if (!oContext) {
+          return;
+        }
+
+        const sStoreName = oContext.getProperty("Name");
+
+        MessageBox.warning(
+          this.i18n("confirmDeleteStoreSingluar", [sStoreName]),
+          {
+            actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
+            emphasizedAction: MessageBox.Action.DELETE,
+            onClose: (sAction) => {
+              if (sAction === MessageBox.Action.DELETE) {
+                this._deleteStore(oContext.getPath(), sStoreName);
+              }
+            },
+          }
+        );
+      },
+
+      /**
+       * Internal helper to execute the delete request.
+       * @param {string} sPath - The path of the store to delete
+       * @private
+       */
+      _deleteStore(sPath, sStoreName) {
+        const oModel = this.getModel();
+        const oView = this.getView();
+
+        oView.setBusy(true);
+
+        oModel.remove(sPath, {
+          success: () => {
+            oView.setBusy(false);
+            MessageToast.show(
+              this.i18n("deleteStoreSuccessSingular", [sStoreName])
+            );
+
+            this.getRouter().navTo("RouteListReport");
+          },
+          error: () => {
+            oView.setBusy(false);
+            MessageBox.error(this.i18n("deleteErrorMessage"));
+          },
+        });
+      },
+
+      /**
        * Event handler for the "Delete" button press on a product item.
        * Shows a confirmation dialog before deleting the product.
        * @param {sap.ui.base.Event} oEvent - The press event object.
