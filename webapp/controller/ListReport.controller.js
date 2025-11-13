@@ -19,7 +19,7 @@ sap.ui.define(
     MessageToast,
     Fragment,
     JSONModel,
-    Sorter,
+    Sorter
   ) => {
     "use strict";
 
@@ -90,7 +90,7 @@ sap.ui.define(
               path: "Name",
               operator: FilterOperator.Contains,
               value1: sSearchValue,
-            }),
+            })
           );
         }
 
@@ -104,7 +104,7 @@ sap.ui.define(
               operator: FilterOperator.BT,
               value1: oDateValue,
               value2: oDateEnd,
-            }),
+            })
           );
         }
 
@@ -115,7 +115,7 @@ sap.ui.define(
           new Filter({
             filters: aFilters,
             and: true,
-          }),
+          })
         );
       },
 
@@ -163,13 +163,13 @@ sap.ui.define(
 
         aItems.forEach((oItem) => {
           const sPath = oItem.getBindingContext().getPath();
-          oModel.remove(sPath, { batchGroupId: "deleteGroup" });
+          oModel.remove(sPath);
         });
 
         oModel.submitChanges({
           success: () => {
             MessageToast.show(
-              oBundle.getText("deleteSuccessMessage", [aItems.length]),
+              oBundle.getText("deleteSuccessMessage", [aItems.length])
             );
           },
           error: () => {
@@ -326,5 +326,5 @@ sap.ui.define(
         });
       },
     });
-  },
+  }
 );

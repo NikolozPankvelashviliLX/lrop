@@ -11,19 +11,19 @@
                 editable="true"
                 layout="ResponsiveGridLayout">
                 
-                <Label text="{i18n>name}" required="true"/>
+                <Label text="{i18n>name}" required="true" labelFor="nameEditInput" />
                 <Input id="nameEditInput" value="{Name}"/>
                 
-                <Label text="{i18n>specs}" />
+                <Label text="{i18n>specs}" labelFor="specsEditInput" />
                 <TextArea rows="4" id="specsEditInput" value="{Specs}"/>
 
-                <Label text="{i18n>supplierInfo}" />
+                <Label text="{i18n>supplierInfo}" labelFor="supplierEditInput" />
                 <TextArea rows="4" id="supplierEditInput" value="{SupplierInfo}"/>
                 
-                <Label text="{i18n>price}" />
-                <Input value="{Price_amount}" />
+                <Label text="{i18n>price}" labelFor="priceEditInput"/>
+                <Input id="priceEditInput" value="{Price_amount}" />
 
-                <Label text="{i18n>rating}" />
+                <Label text="{i18n>rating}" labelFor="ratingEditInput" />
                 <RatingIndicator 
                     id="ratingEditInput"
                     value="{Rating}"

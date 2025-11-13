@@ -5,7 +5,7 @@
     xmlns:l="sap.ui.layout"
     xmlns:uxap="sap.uxap">
 
-    <uxap:ObjectPageLayout id="objectPageLayout" showAnchorBar="true">
+    <uxap:ObjectPageLayout id="objectPageLayout">
 
         <uxap:headerTitle>
             <uxap:ObjectPageDynamicHeaderTitle>
@@ -35,19 +35,19 @@
                         <uxap:blocks>
                             <l:HorizontalLayout>
                                 <f:SimpleForm layout="ResponsiveGridLayout">
-                                    <Label text="{i18n>name}" />
-                                    <Text text="{Name}" />
+                                    <Label text="{i18n>name}" labelFor="basicInfoName" />
+                                    <Text id="basicInfoName" text="{Name}" />
 
-                                    <Label text="{i18n>floorArea}" />
-                                    <Text text="{FloorArea} ft" />
+                                    <Label text="{i18n>floorArea}" labelFor="basicInfoFloorArea" />
+                                    <Text id="basicInfoFloorArea" text="{FloorArea} ft" />
 
                                 </f:SimpleForm>
                                 <f:SimpleForm layout="ResponsiveGridLayout">
-                                    <Label text="{i18n>phone}" />
-                                    <Text text="{PhoneNumber}" />
+                                    <Label text="{i18n>phone}" labelFor="basicInfoPhone" />
+                                    <Text id="basicInfoPhone" text="{PhoneNumber}" />
 
-                                    <Label text="{i18n>establishedDate}" />
-                                    <Text text="{
+                                    <Label text="{i18n>establishedDate}" labelFor="basicInfoEstablishedDate" />
+                                    <Text id="basicInfoEstablishedDate" text="{
                                     path: 'Established',
                                     type: 'sap.ui.model.type.Date',
                                     formatOptions: { style: 'long' }

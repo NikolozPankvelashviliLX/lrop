@@ -185,11 +185,11 @@ sap.ui.define(
           success: () => {
             this._oEditProductDialog.setBusy(false);
             this._oEditProductDialog.close();
-            MessageToast.show(oBundle);
+            MessageToast.show(oBundle.getText("productUpdatedMessage"));
           },
           error: () => {
             this._oEditProductDialog.setBusy(false);
-            MessageBox.error(oBundle.getText("productEditErrorMessage"));
+            MessageBox.error(oBundle.getText("errorUpdatingProductMessage"));
           },
         });
       },

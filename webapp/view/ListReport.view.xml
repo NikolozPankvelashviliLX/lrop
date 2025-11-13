@@ -53,7 +53,7 @@
                     <Column>
                         <Text text="{i18n>name}" />
                     </Column>
-                    <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+                    <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
                         <Text text="{i18n>floorArea}" />
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">

@@ -2,26 +2,26 @@ sap.ui.define([], function () {
   "use strict";
 
   return {
-    formatDate: (dateString) => {
-      if (!dateString) {
+    formatDate: (sDate) => {
+      if (!sDate) {
         return "";
       }
-      const date = new Date(dateString);
+      const date = new Date(sDate);
       return date.toLocaleDateString();
     },
 
-    formatFloorArea: (area) => {
-      if (!area) {
+    formatFloorArea: (sArea) => {
+      if (!sArea) {
         return "";
       }
-      return Number(area).toLocaleString();
+      return Number(sArea).toLocaleString();
     },
 
-    formatCurrency: (value) => {
-      if (value == null) {
+    formatCurrency: (iValue) => {
+      if (!iValue) {
         return "";
       }
-      return Number(value).toLocaleString();
+      return Number(iValue).toLocaleString();
     },
 
     formatAreaState: function (iFloorArea) {
