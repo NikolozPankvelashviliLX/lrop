@@ -76,47 +76,95 @@ sap.ui.define(
        * Event handler for the filter bar's search event.
        * Gathers values from the search field and date picker,
        * creates filters, and applies them to the table binding.
+       * @param {sap.ui.base.Event} oEvent - The search event
        * @public
        */
-      onFilterBarSearch() {
-        const sSearchValue = this.byId("searchField").getValue();
-        const oDateValue = this.byId("datePicker").getDateValue();
-
-        const aFilters = [];
-
-        if (sSearchValue) {
-          aFilters.push(
-            new Filter({
-              path: "Name",
-              operator: FilterOperator.Contains,
-              value1: sSearchValue,
-            })
-          );
+      onFilterBarSearch(oEvent) {
+        let sSearchValue = "";
+        const oFilterBar = oEvent.getSource();
+        const sBasicSearchId = oFilterBar.getBasicSearch();
+        if (sBasicSearchId) {
+          const oBasicSearch = this.byId(sBasicSearchId);
+          if (oBasicSearch) {
+            sSearchValue = oBasicSearch.getValue();
+          }
         }
 
-        if (oDateValue) {
-          const oDateEnd = new Date(oDateValue);
-          oDateEnd.setHours(23, 59, 59, 999);
+        const aSelectionSet = oEvent.getParameter("selectionSet");
 
-          aFilters.push(
-            new Filter({
-              path: "Established",
-              operator: FilterOperator.BT,
-              value1: oDateValue,
-              value2: oDateEnd,
-            })
-          );
-        }
+        const oDatePicker = aSelectionSet.find((oControl) =>
+          oControl.isA("sap.m.DatePicker")
+        );
+        const oDateValue = oDatePicker ? oDatePicker.getDateValue() : null;
 
         const oTable = this.byId("storesTable");
+        const aColumns = oTable.getColumns();
+
+        const aSearchFilters = [];
+        const aDateFilters = [];
+
+        aColumns.forEach((oColumn) => {
+          const sPath = oColumn.data("path");
+
+          if (!sPath) {
+            return;
+          }
+
+          if (sPath === "Established") {
+            if (oDateValue) {
+              const oDateEnd = new Date(oDateValue);
+              oDateEnd.setHours(23, 59, 59, 999);
+
+              aDateFilters.push(
+                new Filter({
+                  path: sPath,
+                  operator: FilterOperator.BT,
+                  value1: oDateValue,
+                  value2: oDateEnd,
+                })
+              );
+            }
+          } else {
+            if (sSearchValue) {
+              aSearchFilters.push(
+                new Filter({
+                  path: sPath,
+                  operator: FilterOperator.Contains,
+                  value1: sSearchValue,
+                  caseSensitive: false,
+                })
+              );
+            }
+          }
+        });
+
+        const aFinalFilters = [];
+
+        if (aSearchFilters.length > 0) {
+          aFinalFilters.push(
+            new Filter({
+              filters: aSearchFilters,
+              and: false,
+            })
+          );
+        }
+
+        if (aDateFilters.length > 0) {
+          aFinalFilters.push(...aDateFilters);
+        }
+
         const oBinding = oTable.getBinding("items");
 
-        oBinding.filter(
-          new Filter({
-            filters: aFilters,
-            and: true,
-          })
-        );
+        if (aFinalFilters.length > 0) {
+          oBinding.filter(
+            new Filter({
+              filters: aFinalFilters,
+              and: true,
+            })
+          );
+        } else {
+          oBinding.filter([]);
+        }
       },
 
       /**
@@ -265,22 +313,21 @@ sap.ui.define(
        * Lazily loads and opens the "SortDialog" (ViewSettingsDialog) fragment.
        * @public
        */
-      onSort() {
+      async onSort() {
         const oView = this.getView();
 
         if (!this._oSortDialog) {
-          Fragment.load({
+          const oDialog = await Fragment.load({
             id: oView.getId(),
             name: "npproj1.view.SortDialog",
             controller: this,
-          }).then((oDialog) => {
-            this._oSortDialog = oDialog;
-            oView.addDependent(this._oSortDialog);
-            this._oSortDialog.open();
           });
-        } else {
-          this._oSortDialog.open();
+
+          this._oSortDialog = oDialog;
+          oView.addDependent(this._oSortDialog);
         }
+
+        this._oSortDialog.open();
       },
 
       /**

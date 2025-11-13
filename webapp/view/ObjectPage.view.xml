@@ -3,6 +3,7 @@
     xmlns="sap.m"
     xmlns:f="sap.ui.layout.form"
     xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
     xmlns:uxap="sap.uxap">
 
     <uxap:ObjectPageLayout id="objectPageLayout">
@@ -76,15 +77,27 @@
                                 <columns>
                                     <Column>
                                         <Text text="{i18n>name}" />
+                                        <customData>
+                                            <core:CustomData key="path" value="Name" />
+                                        </customData>
                                     </Column>
                                     <Column>
                                         <Text text="{i18n>specs}" />
+                                        <customData>
+                                            <core:CustomData key="path" value="Specs" />
+                                        </customData>
                                     </Column>
                                     <Column>
                                         <Text text="{i18n>supplierInfo}" />
+                                        <customData>
+                                            <core:CustomData key="path" value="SupplierInfo" />
+                                        </customData>
                                     </Column>
-                                    <Column hAlign="Center">
+                                    <Column hAlign="End">
                                         <Text text="{i18n>price}" />
+                                        <customData>
+                                            <core:CustomData key="path" value="Price_amount" />
+                                        </customData>
                                     </Column>
                                     <Column hAlign="Center">
                                         <Text text="{i18n>rating}" />

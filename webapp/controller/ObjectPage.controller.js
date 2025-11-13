@@ -68,7 +68,7 @@ sap.ui.define(
 
       /**
        * Event handler for the product table's search field.
-       * Filters the product list based on the search value across multiple fields (Name, Specs, SupplierInfo).
+       * Filters the product list based on the search value across all columns with a 'path' custom data attribute.
        * The filter is case-insensitive and uses an OR condition.
        * @param {sap.ui.base.Event} oEvent - The search event object.
        * @public
@@ -85,18 +85,33 @@ sap.ui.define(
           return;
         }
 
-        // Without "SupplierInfo" field, with the SAME code, if I filtered some data with value "ver"
-        // I would end up with more products... I do not know why...
+        const aColumns = oTable.getColumns();
+        aColumns.forEach((oColumn) => {
+          const sPath = oColumn.data("path");
 
-        ["Name", "Specs", "SupplierInfo"].forEach((sField) => {
-          aFilters.push(
-            new Filter({
-              path: sField,
-              operator: FilterOperator.Contains,
-              value1: sSearchValue,
-              caseSensitive: false,
-            })
-          );
+          if (sPath) {
+            // Special handling for Price_amount because it is of type Edm.Decimal
+            if (sPath === "Price_amount") {
+              if (!isNaN(sSearchValue)) {
+                aFilters.push(
+                  new Filter({
+                    path: sPath,
+                    operator: FilterOperator.EQ,
+                    value1: sSearchValue,
+                  })
+                );
+              }
+            } else {
+              aFilters.push(
+                new Filter({
+                  path: sPath,
+                  operator: FilterOperator.Contains,
+                  value1: sSearchValue,
+                  caseSensitive: false,
+                })
+              );
+            }
+          }
         });
 
         oBinding.filter(
@@ -119,12 +134,14 @@ sap.ui.define(
         const oModel = oBindingContext.getModel();
         const sDeletePath = oBindingContext.getPath();
         const oBundle = this.getView().getModel("i18n").getResourceBundle();
+        const oTable = this.byId("productsTable");
 
         MessageBox.warning(oBundle.getText("cofirmDeleteProductMessage"), {
           actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
           emphasizedAction: MessageBox.Action.DELETE,
           onClose: (sAction) => {
             if (sAction === MessageBox.Action.DELETE) {
+              oTable.setBusy(true);
               oModel.remove(sDeletePath, {
                 success: () => {
                   MessageToast.show(oBundle.getText("productDeletedMessage"));
@@ -135,6 +152,7 @@ sap.ui.define(
                   );
                 },
               });
+              oTable.setBusy(false);
             }
           },
         });
@@ -147,26 +165,27 @@ sap.ui.define(
        * @param {sap.ui.base.Event} oEvent - The press event object.
        * @public
        */
-      onEditPress(oEvent) {
+      async onEditPress(oEvent) {
         const oView = this.getView();
         const oSource = oEvent.getSource();
         const sPath = oSource.getBindingContext().getPath();
+        const oTable = this.byId("productsTable");
 
         if (!this._oEditProductDialog) {
-          Fragment.load({
+          oTable.setBusy(true);
+          const oDialog = await Fragment.load({
             id: oView.getId(),
             name: "npproj1.view.EditProductDialog",
             controller: this,
-          }).then((oDialog) => {
-            this._oEditProductDialog = oDialog;
-            oView.addDependent(this._oEditProductDialog);
-            this._oEditProductDialog.bindElement(sPath);
-            this._oEditProductDialog.open();
           });
-        } else {
-          this._oEditProductDialog.bindElement(sPath);
-          this._oEditProductDialog.open();
+
+          this._oEditProductDialog = oDialog;
+          oView.addDependent(this._oEditProductDialog);
+          oTable.setBusy(false);
         }
+
+        this._oEditProductDialog.bindElement(sPath);
+        this._oEditProductDialog.open();
       },
 
       /**

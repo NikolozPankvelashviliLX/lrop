@@ -2,6 +2,7 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.f"
     xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core"
     xmlns="sap.m">
 
     <f:DynamicPage id="ListReportDynamicPageId">
@@ -16,7 +17,7 @@
 
         <f:header>
             <f:DynamicPageHeader>
-                <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch">
+                <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch" basicSearch="searchField">
 
                     <fb:filterGroupItems>
                         <fb:FilterGroupItem name="SearchFilter" label="{i18n>search}" groupName="Group1" visibleInFilterBar="true">
@@ -52,12 +53,18 @@
                 <columns>
                     <Column>
                         <Text text="{i18n>name}" />
+                        <customData>
+                            <core:CustomData key="path" value="Name" />
+                        </customData>
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
                         <Text text="{i18n>floorArea}" />
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
                         <Text text="{i18n>date}" />
+                        <customData>
+                            <core:CustomData key="path" value="Established" />
+                        </customData>
                     </Column>
                 </columns>
 
