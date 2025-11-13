@@ -5,7 +5,7 @@
     xmlns:core="sap.ui.core"
     xmlns="sap.m">
 
-    <f:DynamicPage id="ListReportDynamicPageId" >
+    <f:DynamicPage id="ListReportDynamicPageId">
 
         <f:title>
             <f:DynamicPageTitle>
@@ -16,18 +16,13 @@
                 <f:snappedContent>
                     <Text text="{= ${appState>/filterMessage} ? ${appState>/filterMessage} : ${i18n>noActiveFilters}}" />
                 </f:snappedContent>
-                
+
             </f:DynamicPageTitle>
         </f:title>
 
         <f:header>
             <f:DynamicPageHeader pinnable="true">
-                <fb:FilterBar 
-                    id="filterbar" 
-                    persistencyKey="myPersKey" 
-                    useToolbar="false" 
-                    search=".onFilterBarSearch" 
-                    basicSearch="searchField">
+                <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch" basicSearch="searchField">
 
                     <fb:dependents>
                         <SearchField id="searchField" width="100%" placeholder="{i18n>search}" search=".onSearchFieldExecute" />
@@ -46,10 +41,10 @@
         </f:header>
 
         <f:content>
-            <Table id="storesTable" mode="MultiSelect" items="{/Stores}" class="sapUiResponsiveMargin" width="auto" selectionChange=".onSelectionChange">
+            <Table id="storesTable" mode="MultiSelect" items="{/Stores}" class="sapUiResponsiveMargin" width="auto" selectionChange=".onSelectionChange" updateFinished="._onTableUpdateFinished">
                 <headerToolbar>
                     <OverflowToolbar>
-                        <Title text="{i18n>storeList}" />
+                        <Title text="{appState>/tableTitle}" />
                         <ToolbarSpacer />
                         <Button text="{i18n>sort}" type="Transparent" icon="sap-icon://sort" press=".onSort" />
                         <Button text="{i18n>create}" type="Transparent" icon="sap-icon://add" press=".onCreate" />

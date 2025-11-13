@@ -53,6 +53,7 @@ sap.ui.define(
         const oViewModel = new JSONModel({
           deleteEnabled: false,
           filterMessage: "",
+          tableTitle: "",
         });
         this.setModel(oViewModel, "appState");
       },
@@ -400,6 +401,29 @@ sap.ui.define(
         const oBinding = oTable.getBinding("items");
 
         oBinding.sort([]);
+      },
+
+      /**
+       * Event handler for the table's 'updateFinished' event.
+       * Updates the table title with the current item count.
+       * @param {sap.ui.base.Event} oEvent - The event object.
+       * @private
+       */
+      _onTableUpdateFinished: function (oEvent) {
+        const iCount = oEvent.getParameter("actual");
+
+        const oViewModel = this.getModel("appState");
+        let sTitle = "";
+
+        if (iCount === 0) {
+          sTitle = this.i18n("tableTitleNoItems");
+        } else if (iCount === 1) {
+          sTitle = this.i18n("tableTitleSingular", [iCount]);
+        } else {
+          sTitle = this.i18n("tableTitlePlural", [iCount]);
+        }
+
+        oViewModel.setProperty("/tableTitle", sTitle);
       },
 
       onListItemPress(oEvent) {
