@@ -58,7 +58,8 @@
       "": {
         "dataSource": "mainService",
         "settings": {
-          "defaultBindingMode": "TwoWay"
+          "defaultBindingMode": "TwoWay",
+          "useBatch": true
         }
       },
       "i18n": {

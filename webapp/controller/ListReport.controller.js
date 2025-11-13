@@ -74,6 +74,20 @@ sap.ui.define(
       },
 
       /**
+       * Event handler for the search field's search event.
+       * Triggers the filter bar's search method.
+       * @param {sap.ui.base.Event} oEvent - The search event
+       * @public
+       */
+      onSearchFieldExecute: function (oEvent) {
+        const oSearchField = oEvent.getSource();
+
+        const oFilterBar = oSearchField.getParent();
+
+        oFilterBar.search();
+      },
+
+      /**
        * Event handler for the filter bar's search event.
        * Gathers values from the search field and date picker,
        * creates filters, and applies them to the table binding.
@@ -199,8 +213,6 @@ sap.ui.define(
        */
       _performDelete(aItems) {
         const oModel = this.getModel();
-
-        oModel.setUseBatch(true);
 
         aItems.forEach((oItem) => {
           const sPath = oItem.getBindingContext().getPath();

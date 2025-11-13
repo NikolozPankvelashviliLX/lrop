@@ -17,16 +17,19 @@
 
         <f:header>
             <f:DynamicPageHeader>
-                <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch" basicSearch="searchField">
+                <fb:FilterBar 
+                    id="filterbar" 
+                    persistencyKey="myPersKey" 
+                    useToolbar="false" 
+                    search=".onFilterBarSearch" 
+                    basicSearch="searchField">
+
+                    <fb:dependents>
+                        <SearchField id="searchField" width="100%" placeholder="{i18n>search}" search=".onSearchFieldExecute" />
+                    </fb:dependents>
 
                     <fb:filterGroupItems>
-                        <fb:FilterGroupItem name="SearchFilter" label="{i18n>search}" groupName="Group1" visibleInFilterBar="true">
-                            <fb:control>
-                                <SearchField id="searchField" width="100%" />
-                            </fb:control>
-                        </fb:FilterGroupItem>
-
-                        <fb:FilterGroupItem name="DateFilter" label="{i18n>Date}" groupName="Group1" visibleInFilterBar="true">
+                        <fb:FilterGroupItem name="DateFilter" label="{i18n>date}" groupName="Group1" visibleInFilterBar="true">
                             <fb:control>
                                 <DatePicker id="datePicker" />
                             </fb:control>
