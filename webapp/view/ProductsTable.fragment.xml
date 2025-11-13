@@ -1,0 +1,80 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+
+    <Table 
+        id="productsTable" 
+        items="{Products}" 
+        mode="SingleSelectLeft" 
+        selectionChange=".onProductSelectionChange"
+        class="sapUiResponsiveMargin" 
+        width="auto">
+        
+        <headerToolbar>
+            <OverflowToolbar>
+                <Title text="{i18n>productsList}" />
+                <ToolbarSpacer />
+                <SearchField id="productsSearchField" width="auto" search=".onProductSearch" />
+                
+                <Button 
+                    id="btnEditProduct"
+                    text="{i18n>edit}" 
+                    icon="sap-icon://edit" 
+                    enabled="false"
+                    press=".onEditPress" />
+                <Button 
+                    id="btnDeleteProduct"
+                    text="{i18n>delete}" 
+                    icon="sap-icon://delete" 
+                    type="Transparent"
+                    enabled="false"
+                    press=".onDeletePress" />
+                    
+            </OverflowToolbar>
+        </headerToolbar>
+
+        <columns>
+            <Column>
+                <Text text="{i18n>name}" />
+                <customData>
+                    <core:CustomData key="path" value="Name" />
+                </customData>
+            </Column>
+            <Column>
+                <Text text="{i18n>specs}" />
+                <customData>
+                    <core:CustomData key="path" value="Specs" />
+                </customData>
+            </Column>
+            <Column>
+                <Text text="{i18n>supplierInfo}" />
+                <customData>
+                    <core:CustomData key="path" value="SupplierInfo" />
+                </customData>
+            </Column>
+            <Column hAlign="End">
+                <Text text="{i18n>price}" />
+                <customData>
+                    <core:CustomData key="path" value="Price_amount" />
+                </customData>
+            </Column>
+            <Column hAlign="Center">
+                <Text text="{i18n>rating}" />
+            </Column>
+            
+            </columns>
+
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <ObjectAttribute text="{Name}" />
+                    <Text text="{Specs}" maxLines="1" wrapping="false" />
+                    <Text text="{SupplierInfo}" maxLines="1" wrapping="false" />
+                    <ObjectNumber number="{path: 'Price_amount', formatter: '.formatter.formatCurrency'}" unit="{Price_currency}" />
+                    <RatingIndicator value="{Rating}" editable="false" iconSize="1rem" />
+                    
+                    </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

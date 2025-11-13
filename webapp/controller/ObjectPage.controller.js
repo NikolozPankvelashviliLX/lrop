@@ -67,6 +67,19 @@ sap.ui.define(
       },
 
       /**
+       * Unlocks the Edit/Delete buttons when a row is selected.
+       * @public
+       */
+      onProductSelectionChange: function (oEvent) {
+        const oTable = oEvent.getSource();
+        const iSelectedItems = oTable.getSelectedItems().length;
+        const bEnabled = iSelectedItems > 0;
+
+        this.byId("btnEditProduct").setEnabled(bEnabled);
+        this.byId("btnDeleteProduct").setEnabled(bEnabled);
+      },
+
+      /**
        * Event handler for the product table's search field.
        * Filters the product list based on the search value across all columns with a 'path' custom data attribute.
        * The filter is case-insensitive and uses an OR condition.
@@ -185,15 +198,15 @@ sap.ui.define(
        * @public
        */
       onDeletePress(oEvent) {
-        const oSource = oEvent.getSource();
-        const oBindingContext = oSource.getBindingContext();
-        const oModel = oBindingContext.getModel();
-        const sDeletePath = oBindingContext.getPath();
+        const oModel = this.getModel();
         const oTable = this.byId("productsTable");
+        const oSelectedItem = oTable.getSelectedItem().getBindingContext();
+        debugger;
+        const sDeletePath = oSelectedItem.getPath();
 
         MessageBox.warning(
           this.i18n("cofirmDeleteProductMessage", [
-            oBindingContext.getProperty("Name"),
+            oSelectedItem.getProperty("Name"),
           ]),
           {
             actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
@@ -225,9 +238,10 @@ sap.ui.define(
        */
       async onEditPress(oEvent) {
         const oView = this.getView();
-        const oSource = oEvent.getSource();
-        const sPath = oSource.getBindingContext().getPath();
+        // const oSource = oEvent.getSource();
         const oTable = this.byId("productsTable");
+        const oSelectedItem = oTable.getSelectedItem();
+        const sPath = oSelectedItem.getBindingContext().getPath();
 
         if (!this._oEditProductDialog) {
           oTable.setBusy(true);
