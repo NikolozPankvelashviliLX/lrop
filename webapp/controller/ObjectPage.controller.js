@@ -1,6 +1,6 @@
 sap.ui.define(
   [
-    "sap/ui/core/mvc/Controller",
+    "npproj1/controller/BaseController",
     "npproj1/model/formatter",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
@@ -9,7 +9,7 @@ sap.ui.define(
     "sap/ui/core/Fragment",
   ],
   (
-    Controller,
+    BaseController,
     Formatter,
     Filter,
     FilterOperator,
@@ -19,7 +19,7 @@ sap.ui.define(
   ) => {
     "use strict";
 
-    return Controller.extend("npproj1.controller.ObjectPage", {
+    return BaseController.extend("npproj1.controller.ObjectPage", {
       /**
        * A reference to the formatter module.
        * @public
@@ -40,7 +40,7 @@ sap.ui.define(
        * @override
        */
       onInit() {
-        const oRouter = this.getOwnerComponent().getRouter();
+        const oRouter = this.getRouter();
         oRouter
           .getRoute("RouteObjectPage")
           .attachPatternMatched(this._onRouteMatched, this);
@@ -55,7 +55,7 @@ sap.ui.define(
       _onRouteMatched(oEvent) {
         const sStoreID = oEvent.getParameter("arguments").StoreID;
 
-        const oModel = this.getView().getModel();
+        const oModel = this.getModel();
 
         const sKey = oModel.createKey("/Stores", {
           ID: sStoreID,
@@ -133,10 +133,9 @@ sap.ui.define(
         const oBindingContext = oSource.getBindingContext();
         const oModel = oBindingContext.getModel();
         const sDeletePath = oBindingContext.getPath();
-        const oBundle = this.getView().getModel("i18n").getResourceBundle();
         const oTable = this.byId("productsTable");
 
-        MessageBox.warning(oBundle.getText("cofirmDeleteProductMessage"), {
+        MessageBox.warning(this.i18n("cofirmDeleteProductMessage"), {
           actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
           emphasizedAction: MessageBox.Action.DELETE,
           onClose: (sAction) => {
@@ -144,12 +143,10 @@ sap.ui.define(
               oTable.setBusy(true);
               oModel.remove(sDeletePath, {
                 success: () => {
-                  MessageToast.show(oBundle.getText("productDeletedMessage"));
+                  MessageToast.show(this.i18n("productDeletedMessage"));
                 },
                 error: () => {
-                  MessageBox.error(
-                    oBundle.getText("productDeleteErrorMessage")
-                  );
+                  MessageBox.error(this.i18n("productDeleteErrorMessage"));
                 },
               });
               oTable.setBusy(false);
@@ -194,23 +191,20 @@ sap.ui.define(
        * @public
        */
       onSaveEdit() {
-        const oModel = this.getView().getModel();
-
-        const oBundle = this.getView().getModel("i18n").getResourceBundle();
+        const oModel = this.getModel();
 
         this._oEditProductDialog.setBusy(true);
 
         oModel.submitChanges({
           success: () => {
-            this._oEditProductDialog.setBusy(false);
             this._oEditProductDialog.close();
-            MessageToast.show(oBundle.getText("productUpdatedMessage"));
+            MessageToast.show(this.i18n("productUpdatedMessage"));
           },
           error: () => {
-            this._oEditProductDialog.setBusy(false);
-            MessageBox.error(oBundle.getText("errorUpdatingProductMessage"));
+            MessageBox.error(this.i18n("errorUpdatingProductMessage"));
           },
         });
+        this._oEditProductDialog.setBusy(false);
       },
 
       /**
@@ -220,7 +214,7 @@ sap.ui.define(
        * @public
        */
       onCancelEdit() {
-        const oModel = this.getView().getModel();
+        const oModel = this.getModel();
         const sPath = this._oEditProductDialog.getBindingContext().getPath();
 
         oModel.resetChanges([sPath]);
@@ -234,7 +228,7 @@ sap.ui.define(
        * @public
        */
       onNavBack() {
-        const oRouter = this.getOwnerComponent().getRouter();
+        const oRouter = this.getRouter();
         oRouter.navTo("RouteListReport");
       },
     });

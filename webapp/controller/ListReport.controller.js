@@ -1,6 +1,6 @@
 sap.ui.define(
   [
-    "sap/ui/core/mvc/Controller",
+    "npproj1/controller/BaseController",
     "npproj1/model/formatter",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
@@ -11,7 +11,7 @@ sap.ui.define(
     "sap/ui/model/Sorter",
   ],
   (
-    Controller,
+    BaseController,
     Formatter,
     Filter,
     FilterOperator,
@@ -23,7 +23,7 @@ sap.ui.define(
   ) => {
     "use strict";
 
-    return Controller.extend("npproj1.controller.ListReport", {
+    return BaseController.extend("npproj1.controller.ListReport", {
       /**
        * A reference to the formatter module.
        * @public
@@ -53,7 +53,7 @@ sap.ui.define(
         const oViewModel = new JSONModel({
           deleteEnabled: false,
         });
-        this.getView().setModel(oViewModel, "appState");
+        this.setModel(oViewModel, "appState");
       },
 
       _getStoresTable() {
@@ -70,9 +70,7 @@ sap.ui.define(
       onSelectionChange() {
         const oTable = this._getStoresTable();
         const bHasSelection = oTable.getSelectedItems().length > 0;
-        this.getView()
-          .getModel("appState")
-          .setProperty("/deleteEnabled", bHasSelection);
+        this.getModel("appState").setProperty("/deleteEnabled", bHasSelection);
       },
 
       /**
@@ -178,14 +176,8 @@ sap.ui.define(
       onDelete() {
         const oTable = this._getStoresTable();
         const aSelectedItems = oTable.getSelectedItems();
-        const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
-        if (aSelectedItems.length === 0) {
-          MessageToast.show(oBundle.getText("zeroSelectedDeleteMessage"));
-          return;
-        }
-
-        const sMessage = oBundle.getText("confirmDeleteMessage", [
+        const sMessage = this.i18n("confirmDeleteMessage", [
           aSelectedItems.length,
         ]);
 
@@ -206,9 +198,7 @@ sap.ui.define(
        * @private
        */
       _performDelete(aItems) {
-        const oModel = this.getView().getModel();
-
-        const oBundle = this.getView().getModel("i18n").getResourceBundle();
+        const oModel = this.getModel();
 
         oModel.setUseBatch(true);
 
@@ -220,11 +210,11 @@ sap.ui.define(
         oModel.submitChanges({
           success: () => {
             MessageToast.show(
-              oBundle.getText("deleteSuccessMessage", [aItems.length])
+              this.i18n("deleteSuccessMessage", [aItems.length])
             );
           },
           error: () => {
-            MessageBox.error(oBundle.getText("deleteErrorMessage"));
+            MessageBox.error(this.i18n("deleteErrorMessage"));
           },
         });
 
@@ -275,8 +265,8 @@ sap.ui.define(
        * @public
        */
       onSaveCreate() {
-        const oModel = this.getView().getModel();
-        const oBundle = this.getView().getModel("i18n").getResourceBundle();
+        const oModel = this.getModel();
+
         const oNewStoreData = this._oCreateDialog
           .getModel("newStore")
           .getData();
@@ -286,7 +276,7 @@ sap.ui.define(
           !oNewStoreData.FloorArea ||
           !oNewStoreData.Established
         ) {
-          MessageToast.show(oBundle.getText("fillRequiredFieldsMessage"));
+          MessageToast.show(this.i18n("fillRequiredFieldsMessage"));
           return;
         }
 
@@ -302,11 +292,11 @@ sap.ui.define(
 
         oModel.create("/Stores", oPayload, {
           success: () => {
-            MessageToast.show(oBundle.getText("storeCreateSuccessMessage"));
+            MessageToast.show(this.i18n("storeCreatedMessage"));
             this._oCreateDialog.close();
           },
           error: () => {
-            MessageBox.error(oBundle.getText("storeCreateErrorMessage"));
+            MessageBox.error(this.i18n("errorCreatingStoreMessage"));
           },
         });
       },
@@ -364,11 +354,10 @@ sap.ui.define(
       },
 
       onListItemPress(oEvent) {
-        const oModel = this.getView().getModel();
         const oItem = oEvent.getSource();
         const sStoreId = oItem.getBindingContext().getProperty("ID");
 
-        this.getOwnerComponent().getRouter().navTo("RouteObjectPage", {
+        this.getRouter().navTo("RouteObjectPage", {
           StoreID: sStoreId,
         });
       },
