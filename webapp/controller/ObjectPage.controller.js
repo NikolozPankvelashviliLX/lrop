@@ -7,6 +7,7 @@ sap.ui.define(
     "sap/m/MessageBox",
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
+    "sap/ui/core/Messaging",
   ],
   (
     BaseController,
@@ -15,7 +16,8 @@ sap.ui.define(
     FilterOperator,
     MessageBox,
     MessageToast,
-    Fragment
+    Fragment,
+    Messaging
   ) => {
     "use strict";
 
@@ -44,6 +46,12 @@ sap.ui.define(
         oRouter
           .getRoute("RouteObjectPage")
           .attachPatternMatched(this._onRouteMatched, this);
+
+        this.getView().setModel(
+          sap.ui.getCore().getMessageManager().getMessageModel(),
+          "message"
+        );
+        Messaging.registerObject(this.getView(), true);
       },
 
       /**
@@ -238,7 +246,6 @@ sap.ui.define(
        */
       async onEditPress(oEvent) {
         const oView = this.getView();
-        // const oSource = oEvent.getSource();
         const oTable = this.byId("productsTable");
         const oSelectedItem = oTable.getSelectedItem();
         const sPath = oSelectedItem.getBindingContext().getPath();
@@ -266,6 +273,11 @@ sap.ui.define(
        * @public
        */
       onSaveEdit() {
+        if (!this._validateForm("editProductGroup")) {
+          MessageToast.show(this.i18n("fixErrorsInForm"));
+          return;
+        }
+
         const oModel = this.getModel();
 
         this._oEditProductDialog.setBusy(true);
@@ -294,7 +306,108 @@ sap.ui.define(
 
         oModel.resetChanges([sPath]);
 
+        this._clearFieldGroupState("editProductGroup");
+
         this._oEditProductDialog.close();
+      },
+
+      /**
+       * Validates an input field on live change or change.
+       * @param {sap.ui.base.Event} oEvent - The event object
+       * @public
+       */
+      onValidateInput(oEvent) {
+        const oInput = oEvent.getSource();
+        const oBinding = oInput.getBinding("value");
+        let sErrorMessage;
+        const oType = oBinding && oBinding.getType ? oBinding.getType() : null;
+
+        if (oType) {
+          try {
+            oType.validateValue(oInput.getValue());
+          } catch (oException) {
+            sErrorMessage = oException.message;
+          }
+        }
+
+        if (
+          !sErrorMessage &&
+          oInput.getRequired &&
+          oInput.getRequired() &&
+          !oInput.getValue()
+        ) {
+          sErrorMessage = this.i18n("fieldRequiredMessage");
+        }
+
+        if (sErrorMessage) {
+          oInput.setValueState("Error");
+          oInput.setValueStateText(sErrorMessage);
+        } else {
+          oInput.setValueState("None");
+        }
+      },
+
+      /**
+       * Validates all controls within a specific field group.
+       * @param {string} sFieldGroupId - The ID of the field group to validate.
+       * @returns {boolean} - true if all fields are valid, false otherwise.
+       * @private
+       */
+      _validateForm(sFieldGroupId) {
+        const oView = this.getView();
+        let bValid = true;
+        const aInputs = oView.getControlsByFieldGroupId(sFieldGroupId);
+
+        aInputs.forEach((oInput) => {
+          if (oInput.getValue && oInput.getValueState) {
+            let sErrorMessage;
+            const oBinding = oInput.getBinding("value");
+            const oType =
+              oBinding && oBinding.getType ? oBinding.getType() : null;
+
+            if (oType) {
+              try {
+                oType.validateValue(oInput.getValue());
+              } catch (oException) {
+                sErrorMessage = oException.message;
+                bValid = false;
+              }
+            }
+
+            if (
+              !sErrorMessage &&
+              oInput.getRequired &&
+              oInput.getRequired() &&
+              !oInput.getValue()
+            ) {
+              sErrorMessage = this.i18n("fieldRequiredMessage");
+              bValid = false;
+            }
+
+            if (sErrorMessage) {
+              oInput.setValueState("Error");
+              oInput.setValueStateText(sErrorMessage);
+            } else if (oInput.setValueState) {
+              oInput.setValueState("None");
+            }
+          }
+        });
+
+        return bValid;
+      },
+
+      /**
+       * Clears the validation state for all controls in a field group.
+       * @param {string} sFieldGroupId - The ID of the field group.
+       * @private
+       */
+      _clearFieldGroupState(sFieldGroupId) {
+        const aInputs = this.getView().getControlsByFieldGroupId(sFieldGroupId);
+        aInputs.forEach((oInput) => {
+          if (oInput.setValueState) {
+            oInput.setValueState("None");
+          }
+        });
       },
 
       /**

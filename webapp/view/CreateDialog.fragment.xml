@@ -8,16 +8,18 @@
         contentWidth="25rem">
         <content>
             <f:SimpleForm
-                editable="true">
+                editable="true"
+                fieldGroupIds="createStoreGroup">
                 
                 <Label text="{i18n>name}" required="true" labelFor="nameInput" />
-                <Input id="nameInput" value="{newStore>/Name}" required="true" />
+                <Input id="nameInput" value="{newStore>/Name}" required="true" liveChange=".onValidateInput" />
                 
                 <Label text="{i18n>floorAreaWithUnit}" required="true" />
                 <Input id="floorAreaInput"
                        value="{newStore>/FloorArea}"
                        type="Number"
                        required="true"
+                       liveChange=".onValidateInput"
                        />
                 
                 <Label text="{i18n>establishedDate}" required="true" />
@@ -26,6 +28,7 @@
                             valueFormat="yyyy-MM-ddTHH:mm:ss"
                             displayFormat="long"
                             required="true"
+                            liveChange=".onValidateInput"
                             />
             </f:SimpleForm>
         </content>

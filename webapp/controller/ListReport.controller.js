@@ -9,6 +9,7 @@ sap.ui.define(
     "sap/ui/core/Fragment",
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/Sorter",
+    "sap/ui/core/Messaging",
   ],
   (
     BaseController,
@@ -19,7 +20,8 @@ sap.ui.define(
     MessageToast,
     Fragment,
     JSONModel,
-    Sorter
+    Sorter,
+    Messaging
   ) => {
     "use strict";
 
@@ -56,6 +58,12 @@ sap.ui.define(
           tableTitle: "",
         });
         this.setModel(oViewModel, "appState");
+
+        this.getView().setModel(
+          sap.ui.getCore().getMessageManager().getMessageModel(),
+          "message"
+        );
+        Messaging.registerObject(this.getView(), true);
       },
 
       _getStoresTable() {
@@ -323,6 +331,7 @@ sap.ui.define(
        * @public
        */
       onCancelCreate() {
+        this._clearFieldGroupState("createStoreGroup");
         this._oCreateDialog.close();
       },
 
@@ -332,6 +341,11 @@ sap.ui.define(
        * @public
        */
       onSaveCreate() {
+        if (!this._validateForm("createStoreGroup")) {
+          MessageToast.show(this.i18n("fixErrorsInForm"));
+          return;
+        }
+
         const oModel = this.getModel();
 
         const oNewStoreData = this._oCreateDialog
@@ -365,6 +379,89 @@ sap.ui.define(
           error: () => {
             MessageBox.error(this.i18n("errorCreatingStoreMessage"));
           },
+        });
+      },
+
+      /**
+       * Validates an input field on live change or change.
+       * @param {sap.ui.base.Event} oEvent - The event object
+       * @public
+       */
+      onValidateInput(oEvent) {
+        const oInput = oEvent.getSource();
+        const sValue = oInput.getValue();
+        let sErrorMessage;
+
+        if (oInput.getRequired && oInput.getRequired() && !sValue) {
+          sErrorMessage = this.i18n("fieldRequiredMessage");
+        } else if (
+          oInput.getType &&
+          oInput.getType() === "Number" &&
+          (isNaN(parseFloat(sValue)) || parseFloat(sValue) <= 0)
+        ) {
+          sErrorMessage = this.i18n("fieldMustBePositiveNumber");
+        }
+
+        if (sErrorMessage) {
+          oInput.setValueState("Error");
+          oInput.setValueStateText(sErrorMessage);
+        } else {
+          oInput.setValueState("None");
+        }
+      },
+
+      /**
+       * Validates all controls within a specific field group.
+       * @param {string} sFieldGroupId - The ID of the field group to validate.
+       * @returns {boolean} - true if all fields are valid, false otherwise.
+       * @private
+       */
+      _validateForm(sFieldGroupId) {
+        const oView = this.getView();
+        let bValid = true;
+        const aInputs = oView.getControlsByFieldGroupId(sFieldGroupId);
+
+        aInputs.forEach((oInput) => {
+          if (oInput.getValue && oInput.getValueState) {
+            if (oInput.getValueState() === "Error") {
+              bValid = false;
+            } else if (
+              oInput.getRequired &&
+              oInput.getRequired() &&
+              !oInput.getValue()
+            ) {
+              bValid = false;
+              oInput.setValueState("Error");
+              oInput.setValueStateText(this.i18n("fieldRequiredMessage"));
+            } else if (
+              oInput.getType &&
+              oInput.getType() === "Number" &&
+              (isNaN(parseFloat(oInput.getValue())) ||
+                parseFloat(oInput.getValue()) <= 0)
+            ) {
+              bValid = false;
+              oInput.setValueState("Error");
+              oInput.setValueStateText(this.i18n("fieldMustBePositiveNumber"));
+            } else if (oInput.setValueState) {
+              oInput.setValueState("None");
+            }
+          }
+        });
+
+        return bValid;
+      },
+
+      /**
+       * Clears the validation state for all controls in a field group.
+       * @param {string} sFieldGroupId - The ID of the field group.
+       * @private
+       */
+      _clearFieldGroupState(sFieldGroupId) {
+        const aInputs = this.getView().getControlsByFieldGroupId(sFieldGroupId);
+        aInputs.forEach((oInput) => {
+          if (oInput.setValueState) {
+            oInput.setValueState("None");
+          }
         });
       },
 
