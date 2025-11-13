@@ -52,6 +52,7 @@ sap.ui.define(
       onInit() {
         const oViewModel = new JSONModel({
           deleteEnabled: false,
+          filterMessage: "",
         });
         this.setModel(oViewModel, "appState");
       },
@@ -95,9 +96,13 @@ sap.ui.define(
        * @public
        */
       onFilterBarSearch(oEvent) {
+        const oViewModel = this.getModel("appState");
+
         let sSearchValue = "";
+
         const oFilterBar = oEvent.getSource();
         const sBasicSearchId = oFilterBar.getBasicSearch();
+
         if (sBasicSearchId) {
           const oBasicSearch = this.byId(sBasicSearchId);
           if (oBasicSearch) {
@@ -111,6 +116,38 @@ sap.ui.define(
           oControl.isA("sap.m.DatePicker")
         );
         const oDateValue = oDatePicker ? oDatePicker.getDateValue() : null;
+
+        const aActiveFilters = [];
+
+        if (sSearchValue) {
+          aActiveFilters.push(this.i18n("search"));
+        }
+        if (oDateValue) {
+          aActiveFilters.push(this.i18n("date"));
+        }
+
+        const iCount = aActiveFilters.length;
+        let sMsg = "";
+
+        if (iCount === 0) {
+          sMsg = this.i18n("noActiveFilters");
+        } else {
+          const aDisplayList = aActiveFilters.slice(0, 5);
+          let sListStr = aDisplayList.join(", ");
+
+          if (iCount > 5) {
+            sListStr += ", ...";
+          }
+
+          if (iCount === 1) {
+            sMsg =
+              this.i18n("filtersAppliedSingular", [iCount]) + " " + sListStr;
+          } else {
+            sMsg = this.i18n("filtersAppliedPlural", [iCount]) + " " + sListStr;
+          }
+        }
+
+        oViewModel.setProperty("/filterMessage", sMsg);
 
         const oTable = this._getStoresTable();
         const aColumns = oTable.getColumns();
