@@ -228,10 +228,17 @@ sap.ui.define(
       onDelete() {
         const oTable = this._getStoresTable();
         const aSelectedItems = oTable.getSelectedItems();
+        const deleteCount = aSelectedItems.length;
 
-        const sMessage = this.i18n("confirmDeleteMessage", [
-          aSelectedItems.length,
-        ]);
+        let sMessage = "";
+
+        if (deleteCount === 1) {
+          sMessage = this.i18n("confirmDeleteStoreSingluar", [
+            aSelectedItems[0].getBindingContext().getProperty("Name"),
+          ]);
+        } else {
+          sMessage = this.i18n("confirmDeleteStoresPlural", [deleteCount]);
+        }
 
         MessageBox.warning(sMessage, {
           actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
