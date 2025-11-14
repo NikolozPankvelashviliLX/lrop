@@ -21,14 +21,16 @@
                     text="{i18n>edit}" 
                     icon="sap-icon://edit" 
                     enabled="false"
-                    press=".onEditPress" />
+                    press=".onEditPress" 
+                    />
                 <Button 
                     id="btnDeleteProduct"
                     text="{i18n>delete}" 
                     icon="sap-icon://delete" 
                     type="Transparent"
                     enabled="false"
-                    press=".onDeletePress" />
+                    press=".onDeletePress" 
+                    />
                     
             </OverflowToolbar>
         </headerToolbar>

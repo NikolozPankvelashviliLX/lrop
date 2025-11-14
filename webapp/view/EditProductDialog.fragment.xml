@@ -9,10 +9,10 @@
                 <Input id="nameEditInput" value="{path: 'Name', type: 'sap.ui.model.type.String', constraints: { minLength: 3 }}" required="true" liveChange=".onValidateInput" />
 
                 <Label text="{i18n>specs}" labelFor="specsEditInput" />
-                <TextArea rows="4" id="specsEditInput" value="{Specs}"/>
+                <TextArea rows="4" id="specsEditInput" value="{Specs}" />
 
                 <Label text="{i18n>supplierInfo}" labelFor="supplierEditInput" />
-                <TextArea rows="4" id="supplierEditInput" value="{SupplierInfo}"/>
+                <TextArea rows="4" id="supplierEditInput" value="{SupplierInfo}" />
 
                 <Label text="{i18n>price}" labelFor="priceEditInput"/>
                 <Input id="priceEditInput" value="{path: 'Price_amount', type: 'sap.ui.model.type.Float', constraints: { minimum: 1 }}" required="true" liveChange=".onValidateInput" />
@@ -23,10 +23,10 @@
             </f:SimpleForm>
         </content>
         <beginButton>
-            <Button text="{i18n>save}" type="Emphasized" press=".onSaveEdit"/>
+            <Button text="{i18n>save}" type="Emphasized" press=".onSaveEdit" />
         </beginButton>
         <endButton>
-            <Button text="{i18n>cancel}" press=".onCancelEdit"/>
+            <Button text="{i18n>cancel}" press=".onCancelEdit" />
         </endButton>
     </Dialog>
 </core:FragmentDefinition>
