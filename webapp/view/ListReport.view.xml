@@ -12,30 +12,47 @@
                 <f:heading>
                     <Title text="{i18n>listReport}" />
                 </f:heading>
-
                 <f:snappedContent>
                     <Text text="{= ${appState>/filterMessage} ? ${appState>/filterMessage} : ${i18n>noActiveFilters}}" />
                 </f:snappedContent>
-
             </f:DynamicPageTitle>
         </f:title>
 
         <f:header>
             <f:DynamicPageHeader pinnable="true">
-                <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch" basicSearch="searchField">
-
-                    <fb:dependents>
-                        <SearchField id="searchField" width="100%" placeholder="{i18n>search}" search=".onSearchFieldExecute" />
-                    </fb:dependents>
+                <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch">
 
                     <fb:filterGroupItems>
+
+                        <fb:FilterGroupItem name="Name" label="{i18n>name}" groupName="Group1" visibleInFilterBar="true">
+                            <fb:control>
+                                <MultiInput showValueHelp="true" valueHelpRequest=".onValueHelpRequest" placeholder="Select Name conditions" showSuggestion="false">
+                                    <customData>
+                                        <core:CustomData key="propertyPath" value="Name" />
+                                        <core:CustomData key="filterType" value="string" />
+                                    </customData>
+                                </MultiInput>
+                            </fb:control>
+                        </fb:FilterGroupItem>
+
+                        <fb:FilterGroupItem name="FloorArea" label="{i18n>floorArea}" groupName="Group1" visibleInFilterBar="true">
+                            <fb:control>
+                                <MultiInput showValueHelp="true" valueHelpRequest=".onValueHelpRequest" placeholder="Select Area conditions" showSuggestion="false">
+                                    <customData>
+                                        <core:CustomData key="propertyPath" value="FloorArea" />
+                                        <core:CustomData key="filterType" value="number" />
+                                    </customData>
+                                </MultiInput>
+                            </fb:control>
+                        </fb:FilterGroupItem>
+
                         <fb:FilterGroupItem name="DateFilter" label="{i18n>date}" groupName="Group1" visibleInFilterBar="true">
                             <fb:control>
                                 <DatePicker id="datePicker" />
                             </fb:control>
                         </fb:FilterGroupItem>
-                    </fb:filterGroupItems>
 
+                    </fb:filterGroupItems>
                 </fb:FilterBar>
             </f:DynamicPageHeader>
         </f:header>
@@ -60,6 +77,9 @@
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
                         <Text text="{i18n>floorArea}" />
+                        <customData>
+                            <core:CustomData key="path" value="FloorArea" />
+                        </customData>
                     </Column>
                     <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
                         <Text text="{i18n>date}" />
@@ -83,6 +103,5 @@
                 </items>
             </Table>
         </f:content>
-
     </f:DynamicPage>
 </mvc:View>

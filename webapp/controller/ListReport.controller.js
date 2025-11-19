@@ -10,6 +10,9 @@ sap.ui.define(
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/Sorter",
     "sap/ui/core/Messaging",
+    "sap/ui/comp/valuehelpdialog/ValueHelpDialog",
+    "sap/ui/model/type/Float",
+    "sap/ui/model/type/String",
   ],
   (
     BaseController,
@@ -21,7 +24,10 @@ sap.ui.define(
     Fragment,
     JSONModel,
     Sorter,
-    Messaging
+    Messaging,
+    ValueHelpDialog,
+    Float,
+    String
   ) => {
     "use strict";
 
@@ -45,6 +51,14 @@ sap.ui.define(
        * @type {sap.m.ViewSettingsDialog | null}
        */
       _oSortDialog: null,
+
+      /**
+       * Stores a reference to the generic Value Help Dialog.
+       * Used to manage the dialog instance when switching between different filter types.
+       * @private
+       * @type {sap.ui.comp.valuehelpdialog.ValueHelpDialog | null}
+       */
+      _oValueHelpDialog: null,
 
       /**
        * Called when the controller is instantiated.
@@ -84,17 +98,57 @@ sap.ui.define(
       },
 
       /**
-       * Event handler for the search field's search event.
-       * Triggers the filter bar's search method.
-       * @param {sap.ui.base.Event} oEvent - The search event
-       * @public
+       * Opens the Value Help Dialog in "Conditions Only" mode.
+       * @param {sap.ui.base.Event} oEvent
        */
-      onSearchFieldExecute: function (oEvent) {
-        const oSearchField = oEvent.getSource();
+      onValueHelpRequest(oEvent) {
+        const oMultiInput = oEvent.getSource();
 
-        const oFilterBar = oSearchField.getParent();
+        const sPath = oMultiInput.data("propertyPath");
+        const sType = oMultiInput.data("filterType");
 
-        oFilterBar.search();
+        const sLabel = oMultiInput.getParent().getLabel();
+
+        let oTypeInstance;
+
+        if (sType === "number") {
+          oTypeInstance = new Float();
+        } else if (sType === "string") {
+          oTypeInstance = new String();
+        }
+
+        if (this._oValueHelpDialog) {
+          this._oValueHelpDialog.destroy();
+        }
+
+        this._oValueHelpDialog = new ValueHelpDialog({
+          title: sLabel,
+          supportRanges: true,
+          supportRangesOnly: true,
+          key: sPath,
+          descriptionKey: sPath,
+
+          ok: (oDialogEvent) => {
+            const aTokens = oDialogEvent.getParameter("tokens");
+            oMultiInput.setTokens(aTokens);
+            this._oValueHelpDialog.close();
+          },
+          cancel: () => {
+            this._oValueHelpDialog.close();
+          },
+        });
+
+        this._oValueHelpDialog.setRangeKeyFields([
+          {
+            label: sLabel,
+            key: sPath,
+            type: sType,
+            typeInstance: oTypeInstance,
+          },
+        ]);
+
+        this._oValueHelpDialog.setTokens(oMultiInput.getTokens());
+        this._oValueHelpDialog.open();
       },
 
       /**
@@ -106,126 +160,96 @@ sap.ui.define(
        */
       onFilterBarSearch(oEvent) {
         const oViewModel = this.getModel("appState");
+        const aFinalFilters = [];
+        let iFilterCount = 0;
 
-        let sSearchValue = "";
+        const oFilterBar = this.byId("filterbar");
+        const aFilterItems = oFilterBar.getFilterGroupItems();
 
-        const oFilterBar = oEvent.getSource();
-        const sBasicSearchId = oFilterBar.getBasicSearch();
+        aFilterItems.forEach((oItem) => {
+          const oControl = oItem.getControl();
 
-        if (sBasicSearchId) {
-          const oBasicSearch = this.byId(sBasicSearchId);
-          if (oBasicSearch) {
-            sSearchValue = oBasicSearch.getValue();
-          }
-        }
+          // A. Handle MultiInputs (Generic)
+          // We check if it is a MultiInput and has the customData we expect
+          if (
+            oControl.isA("sap.m.MultiInput") &&
+            oControl.data("propertyPath")
+          ) {
+            const sPath = oControl.data("propertyPath");
+            const aTokens = oControl.getTokens();
 
-        const aSelectionSet = oEvent.getParameter("selectionSet");
-
-        const oDatePicker = aSelectionSet.find((oControl) =>
-          oControl.isA("sap.m.DatePicker")
-        );
-        const oDateValue = oDatePicker ? oDatePicker.getDateValue() : null;
-
-        const aActiveFilters = [];
-
-        if (sSearchValue) {
-          aActiveFilters.push(this.i18n("search"));
-        }
-        if (oDateValue) {
-          aActiveFilters.push(this.i18n("date"));
-        }
-
-        const iCount = aActiveFilters.length;
-        let sMsg = "";
-
-        if (iCount === 0) {
-          sMsg = this.i18n("noActiveFilters");
-        } else {
-          const aDisplayList = aActiveFilters.slice(0, 5);
-          let sListStr = aDisplayList.join(", ");
-
-          if (iCount > 5) {
-            sListStr += ", ...";
-          }
-
-          if (iCount === 1) {
-            sMsg =
-              this.i18n("filtersAppliedSingular", [iCount]) + " " + sListStr;
-          } else {
-            sMsg = this.i18n("filtersAppliedPlural", [iCount]) + " " + sListStr;
-          }
-        }
-
-        oViewModel.setProperty("/filterMessage", sMsg);
-
-        const oTable = this._getStoresTable();
-        const aColumns = oTable.getColumns();
-
-        const aSearchFilters = [];
-        const aDateFilters = [];
-
-        aColumns.forEach((oColumn) => {
-          const sPath = oColumn.data("path");
-
-          if (!sPath) {
-            return;
-          }
-
-          if (sPath === "Established") {
-            if (oDateValue) {
-              const oDateEnd = new Date(oDateValue);
-              oDateEnd.setHours(23, 59, 59, 999);
-
-              aDateFilters.push(
-                new Filter({
-                  path: sPath,
-                  operator: FilterOperator.BT,
-                  value1: oDateValue,
-                  value2: oDateEnd,
-                })
-              );
+            if (aTokens.length > 0) {
+              const aFilters = this._getFiltersFromMultiInput(oControl, sPath);
+              if (aFilters.length > 0) {
+                aFinalFilters.push(
+                  new Filter({ filters: aFilters, and: false })
+                );
+                iFilterCount += aTokens.length;
+              }
             }
-          } else {
-            if (sSearchValue) {
-              aSearchFilters.push(
-                new Filter({
-                  path: sPath,
-                  operator: FilterOperator.Contains,
-                  value1: sSearchValue,
-                  caseSensitive: false,
-                })
-              );
-            }
+          }
+
+          // B. Handle DatePicker
+          if (oControl.isA("sap.m.DatePicker") && oControl.getDateValue()) {
+            const oDateValue = oControl.getDateValue();
+            const oDateEnd = new Date(oDateValue);
+            oDateEnd.setHours(23, 59, 59, 999);
+
+            aFinalFilters.push(
+              new Filter({
+                path: "Established",
+                operator: FilterOperator.BT,
+                value1: oDateValue,
+                value2: oDateEnd,
+              })
+            );
+            iFilterCount++;
           }
         });
 
-        const aFinalFilters = [];
+        let sMsg =
+          iFilterCount === 0
+            ? this.i18n("noActiveFilters")
+            : this.i18n("filtersAppliedPlural", [iFilterCount]);
+        oViewModel.setProperty("/filterMessage", sMsg);
 
-        if (aSearchFilters.length > 0) {
-          aFinalFilters.push(
-            new Filter({
-              filters: aSearchFilters,
-              and: false,
-            })
-          );
-        }
-
-        if (aDateFilters.length > 0) {
-          aFinalFilters.push(...aDateFilters);
-        }
-
+        const oTable = this._getStoresTable();
         const oBinding = oTable.getBinding("items");
 
         if (aFinalFilters.length > 0) {
-          oBinding.filter(
-            new Filter({
-              filters: aFinalFilters,
-              and: true,
-            })
-          );
+          oBinding.filter(new Filter({ filters: aFinalFilters, and: true }));
         } else {
           oBinding.filter([]);
         }
+      },
+
+      /**
+       * Helper method to convert MultiInput tokens (from ValueHelpDialog) into an array of OData Filters.
+       * It extracts the 'range' custom data from each token to build the corresponding filter operation.
+       *
+       * @param {sap.m.MultiInput} oMultiInput - The MultiInput control instance containing the tokens.
+       * @param {string} sPath - The OData property path (e.g., "Name", "FloorArea") to apply the filter to.
+       * @returns {sap.ui.model.Filter[]} An array of filter objects ready to be applied to the binding.
+       * @private
+       */
+      _getFiltersFromMultiInput(oMultiInput, sPath) {
+        const aTokens = oMultiInput.getTokens();
+        const aFilters = [];
+
+        aTokens.forEach(function (oToken) {
+          const oRangeData = oToken.data("range");
+          if (oRangeData) {
+            aFilters.push(
+              new Filter({
+                path: sPath,
+                operator: oRangeData.operation,
+                value1: oRangeData.value1,
+                value2: oRangeData.value2,
+              })
+            );
+          }
+        });
+        return aFilters;
       },
 
       /**
