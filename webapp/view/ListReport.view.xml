@@ -25,7 +25,7 @@
                 <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onFilterBarSearch" basicSearch="searchField">
 
                     <fb:dependents>
-                        <SearchField id="searchField" width="100%" placeholder="{i18n>search}" search=".onSearchFieldExecute" />
+                        <SearchField id="searchField" width="100%" search=".onSearchFieldExecute" />
                     </fb:dependents>
 
                     <fb:filterGroupItems>

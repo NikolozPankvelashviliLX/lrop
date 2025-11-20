@@ -53,11 +53,14 @@
                                     <Text id="basicInfoPhone" text="{PhoneNumber}" />
 
                                     <Label text="{i18n>establishedDate}" labelFor="basicInfoEstablishedDate" />
-                                    <Text id="basicInfoEstablishedDate" text="{
-                                    path: 'Established',
-                                    type: 'sap.ui.model.type.Date',
-                                    formatOptions: { style: 'long' }
-                                    }" />
+                                    <Text 
+                                    id="basicInfoEstablishedDate" 
+                                    text="{
+                                        path: 'Established',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: { style: 'long' }
+                                        }" 
+                                    />
                                 </f:SimpleForm>
                             </l:HorizontalLayout>
                         </uxap:blocks>

@@ -59,13 +59,18 @@ sap.ui.define(
         });
         this.setModel(oViewModel, "appState");
 
-        this.getView().setModel(
+        this.setModel(
           sap.ui.getCore().getMessageManager().getMessageModel(),
           "message"
         );
         Messaging.registerObject(this.getView(), true);
       },
 
+      /**
+       * Convenience method to retrieve the main table control from the view.
+       * @returns {sap.m.Table} The stores table control instance.
+       * @private
+       */
       _getStoresTable() {
         return this.byId("storesTable");
       },
@@ -89,7 +94,7 @@ sap.ui.define(
        * @param {sap.ui.base.Event} oEvent - The search event
        * @public
        */
-      onSearchFieldExecute: function (oEvent) {
+      onSearchFieldExecute(oEvent) {
         const oSearchField = oEvent.getSource();
 
         const oFilterBar = oSearchField.getParent();
@@ -236,16 +241,16 @@ sap.ui.define(
       onDelete() {
         const oTable = this._getStoresTable();
         const aSelectedItems = oTable.getSelectedItems();
-        const deleteCount = aSelectedItems.length;
+        const iDeleteCount = aSelectedItems.length;
 
         let sMessage = "";
 
-        if (deleteCount === 1) {
+        if (iDeleteCount === 1) {
           sMessage = this.i18n("confirmDeleteStoreSingluar", [
             aSelectedItems[0].getBindingContext().getProperty("Name"),
           ]);
         } else {
-          sMessage = this.i18n("confirmDeleteStoresPlural", [deleteCount]);
+          sMessage = this.i18n("confirmDeleteStoresPlural", [iDeleteCount]);
         }
 
         MessageBox.warning(sMessage, {

@@ -12,10 +12,7 @@ sap.ui.define(
        * @returns {string}         the localized text
        */
       i18n: function (sKey, aArgs) {
-        return this.getView()
-          .getModel("i18n")
-          .getResourceBundle()
-          .getText(sKey, aArgs);
+        return this.getModel("i18n").getResourceBundle().getText(sKey, aArgs);
       },
 
       /**
@@ -42,7 +39,7 @@ sap.ui.define(
        * @public
        * @param {sap.ui.model.Model} oModel the model instance
        * @param {string} sName the model name
-       * @returns {sap.ui.mvc.View} the view instance
+       * @returns {sap.ui.core.mvc.View} the view instance
        */
       setModel: function (oModel, sName) {
         return this.getView().setModel(oModel, sName);

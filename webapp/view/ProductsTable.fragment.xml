@@ -1,37 +1,17 @@
-<core:FragmentDefinition
-    xmlns:core="sap.ui.core"
+<core:FragmentDefinition xmlns:core="sap.ui.core"
     xmlns="sap.m">
 
-    <Table 
-        id="productsTable" 
-        items="{Products}" 
-        mode="SingleSelectLeft" 
-        selectionChange=".onProductSelectionChange"
-        class="sapUiResponsiveMargin" 
-        width="auto">
-        
+    <Table id="productsTable" items="{Products}" mode="SingleSelectLeft" selectionChange=".onProductSelectionChange" class="sapUiResponsiveMargin" width="auto">
+
         <headerToolbar>
             <OverflowToolbar>
                 <Title text="{i18n>productsList}" />
                 <ToolbarSpacer />
                 <SearchField id="productsSearchField" width="auto" search=".onProductSearch" />
-                
-                <Button 
-                    id="btnEditProduct"
-                    text="{i18n>edit}" 
-                    icon="sap-icon://edit" 
-                    enabled="false"
-                    press=".onEditPress" 
-                    />
-                <Button 
-                    id="btnDeleteProduct"
-                    text="{i18n>delete}" 
-                    icon="sap-icon://delete" 
-                    type="Transparent"
-                    enabled="false"
-                    press=".onDeletePress" 
-                    />
-                    
+
+                <Button id="btnEditProduct" text="{i18n>edit}" icon="sap-icon://edit" enabled="false" press=".onEditPress" />
+                <Button id="btnDeleteProduct" text="{i18n>delete}" icon="sap-icon://delete" type="Transparent" enabled="false" press=".onDeletePress" />
+
             </OverflowToolbar>
         </headerToolbar>
 
@@ -63,8 +43,8 @@
             <Column hAlign="Center">
                 <Text text="{i18n>rating}" />
             </Column>
-            
-            </columns>
+
+        </columns>
 
         <items>
             <ColumnListItem>
@@ -74,8 +54,7 @@
                     <Text text="{SupplierInfo}" maxLines="1" wrapping="false" />
                     <ObjectNumber number="{path: 'Price_amount', formatter: '.formatter.formatCurrency'}" unit="{Price_currency}" />
                     <RatingIndicator value="{Rating}" editable="false" iconSize="1rem" />
-                    
-                    </cells>
+                </cells>
             </ColumnListItem>
         </items>
     </Table>

@@ -209,7 +209,6 @@ sap.ui.define(
         const oModel = this.getModel();
         const oTable = this.byId("productsTable");
         const oSelectedItem = oTable.getSelectedItem().getBindingContext();
-        debugger;
         const sDeletePath = oSelectedItem.getPath();
 
         MessageBox.warning(
