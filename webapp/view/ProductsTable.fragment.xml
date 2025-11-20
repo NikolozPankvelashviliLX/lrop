@@ -42,6 +42,9 @@
             </Column>
             <Column hAlign="Center">
                 <Text text="{i18n>rating}" />
+                <customData>
+                    <core:CustomData key="path" value="Rating" /> 
+                </customData>
             </Column>
 
         </columns>

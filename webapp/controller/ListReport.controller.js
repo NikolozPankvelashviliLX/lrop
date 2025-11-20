@@ -59,10 +59,7 @@ sap.ui.define(
         });
         this.setModel(oViewModel, "appState");
 
-        this.setModel(
-          sap.ui.getCore().getMessageManager().getMessageModel(),
-          "message"
-        );
+        this.setModel(Messaging.getMessageModel(), "message");
         Messaging.registerObject(this.getView(), true);
       },
 

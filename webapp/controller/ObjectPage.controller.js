@@ -121,7 +121,7 @@ sap.ui.define(
 
           if (sPath) {
             // Special handling for Price_amount because it is of type Edm.Decimal
-            if (sPath === "Price_amount") {
+            if (sPath === "Price_amount" || sPath === "Rating") {
               if (!isNaN(sSearchValue)) {
                 aFilters.push(
                   new Filter({

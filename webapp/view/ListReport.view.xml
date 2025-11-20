@@ -41,7 +41,7 @@
         </f:header>
 
         <f:content>
-            <Table id="storesTable" mode="MultiSelect" items="{/Stores}" class="sapUiResponsiveMargin" width="auto" selectionChange=".onSelectionChange" updateFinished="._onTableUpdateFinished">
+            <Table id="storesTable" mode="MultiSelect" items="{/Stores}" width="auto" selectionChange=".onSelectionChange" updateFinished="._onTableUpdateFinished">
                 <headerToolbar>
                     <OverflowToolbar>
                         <Title text="{appState>/tableTitle}" />
