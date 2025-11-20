@@ -1,11 +1,11 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core"
     xmlns="sap.m">
 
-    <Table id="productsTable" items="{Products}" mode="SingleSelectLeft" selectionChange=".onProductSelectionChange" class="sapUiResponsiveMargin" width="auto">
+    <Table id="productsTable" items="{Products}" mode="SingleSelectLeft" selectionChange=".onProductSelectionChange" width="auto" updateFinished=".onProductsTableUpdateFinished">
 
         <headerToolbar>
             <OverflowToolbar>
-                <Title text="{i18n>productsList}" />
+                <Title text="{view>/productsTableTitle}" />
                 <ToolbarSpacer />
                 <SearchField id="productsSearchField" width="auto" search=".onProductSearch" />
 

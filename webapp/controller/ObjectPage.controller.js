@@ -48,6 +48,7 @@ sap.ui.define(
       onInit() {
         const oViewModel = new JSONModel({
           productSelected: false,
+          productsTableTitle: "",
         });
         this.setModel(oViewModel, "view");
 
@@ -150,6 +151,29 @@ sap.ui.define(
             and: false,
           })
         );
+      },
+
+      /**
+       * Event handler for the products table 'updateFinished' event.
+       * Updates the table title with the current item count.
+       * @param {sap.ui.base.Event} oEvent - The event object.
+       * @public
+       */
+      onProductsTableUpdateFinished(oEvent) {
+        const iCount = oEvent.getParameter("actual");
+        const oViewModel = this.getModel("view");
+        let sTitle = "";
+
+        // Reusing the same i18n keys as ListReport for consistency
+        if (iCount === 0) {
+          sTitle = this.i18n("tableTitleNoItems");
+        } else if (iCount === 1) {
+          sTitle = this.i18n("tableTitleSingular", [iCount]);
+        } else {
+          sTitle = this.i18n("tableTitlePlural", [iCount]);
+        }
+
+        oViewModel.setProperty("/productsTableTitle", sTitle);
       },
 
       /**
