@@ -104,33 +104,60 @@ sap.ui.define(
 
       /**
        * Event handler for the filter bar's search event.
-       * Gathers values from the search field and date picker,
-       * creates filters, and applies them to the table binding.
+       * Orchestrates the filter gathering, UI updates, and table filtering.
        * @param {sap.ui.base.Event} oEvent - The search event
        * @public
        */
       onFilterBarSearch(oEvent) {
-        const oViewModel = this.getModel("appState");
-
-        let sSearchValue = "";
-
         const oFilterBar = oEvent.getSource();
-        const sBasicSearchId = oFilterBar.getBasicSearch();
+        const aSelectionSet = oEvent.getParameter("selectionSet");
 
+        const sSearchValue = this._getBasicSearchValue(oFilterBar);
+        const oDateValue = this._getDatePickerValue(aSelectionSet);
+
+        this._updateFilterMessage(sSearchValue, oDateValue);
+
+        const aFilters = this._generateTableFilters(sSearchValue, oDateValue);
+        this._applyFiltersToTable(aFilters);
+      },
+
+      /**
+       * Extracts the value from the Basic Search field defined in the FilterBar.
+       * @param {sap.ui.comp.filterbar.FilterBar} oFilterBar - The FilterBar control
+       * @returns {string} The search value or an empty string.
+       * @private
+       */
+      _getBasicSearchValue(oFilterBar) {
+        const sBasicSearchId = oFilterBar.getBasicSearch();
         if (sBasicSearchId) {
           const oBasicSearch = this.byId(sBasicSearchId);
           if (oBasicSearch) {
-            sSearchValue = oBasicSearch.getValue();
+            return oBasicSearch.getValue();
           }
         }
+        return "";
+      },
 
-        const aSelectionSet = oEvent.getParameter("selectionSet");
-
+      /**
+       * Finds the DatePicker within the FilterBar's selection set and returns its value.
+       * @param {sap.ui.core.Control[]} aSelectionSet - The array of controls in the filter bar
+       * @returns {Date|null} The selected date or null.
+       * @private
+       */
+      _getDatePickerValue(aSelectionSet) {
         const oDatePicker = aSelectionSet.find((oControl) =>
           oControl.isA("sap.m.DatePicker")
         );
-        const oDateValue = oDatePicker ? oDatePicker.getDateValue() : null;
+        return oDatePicker ? oDatePicker.getDateValue() : null;
+      },
 
+      /**
+       * Updates the filter message text based on active filters.
+       * @param {string} sSearchValue - The current search string
+       * @param {Date} oDateValue - The current date filter value
+       * @private
+       */
+      _updateFilterMessage(sSearchValue, oDateValue) {
         const aActiveFilters = [];
 
         if (sSearchValue) {
@@ -161,17 +188,25 @@ sap.ui.define(
           }
         }
 
-        oViewModel.setProperty("/filterMessage", sMsg);
+        this.getModel("appState").setProperty("/filterMessage", sMsg);
+      },
 
+      /**
+       * Generates the final list of OData filters based on table column metadata.
+       * Creates an OR query for the search string across columns, and an AND query for the date.
+       * @param {string} sSearchValue - The search string
+       * @param {Date} oDateValue - The date value
+       * @returns {sap.ui.model.Filter[]} Array of filters
+       * @private
+       */
+      _generateTableFilters(sSearchValue, oDateValue) {
         const oTable = this._getStoresTable();
         const aColumns = oTable.getColumns();
-
         const aSearchFilters = [];
         const aDateFilters = [];
 
         aColumns.forEach((oColumn) => {
           const sPath = oColumn.data("path");
-
           if (!sPath) {
             return;
           }
@@ -219,6 +254,16 @@ sap.ui.define(
           aFinalFilters.push(...aDateFilters);
         }
 
+        return aFinalFilters;
+      },
+
+      /**
+       * Applies the generated filters to the table binding.
+       * @param {sap.ui.model.Filter[]} aFinalFilters - The filters to apply
+       * @private
+       */
+      _applyFiltersToTable(aFinalFilters) {
+        const oTable = this._getStoresTable();
         const oBinding = oTable.getBinding("items");
 
         if (aFinalFilters.length > 0) {
