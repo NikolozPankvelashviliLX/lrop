@@ -182,7 +182,10 @@ sap.ui.define(
               const aFilters = this._getFiltersFromMultiInput(oControl, sPath);
               if (aFilters.length > 0) {
                 aFinalFilters.push(
-                  new Filter({ filters: aFilters, and: false })
+                  new Filter({
+                    filters: aFilters,
+                    and: false,
+                  })
                 );
                 iFilterCount += aTokens.length;
               }
@@ -245,6 +248,7 @@ sap.ui.define(
                 operator: oRangeData.operation,
                 value1: oRangeData.value1,
                 value2: oRangeData.value2,
+                caseSensitive: false,
               })
             );
           }
