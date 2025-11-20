@@ -47,7 +47,8 @@ sap.ui.define(
        */
       onInit() {
         const oViewModel = new JSONModel({
-          productSelected: false,
+          editEnabled: false,
+          deleteEnabled: false,
           productsTableTitle: "",
         });
         this.setModel(oViewModel, "view");
@@ -92,9 +93,10 @@ sap.ui.define(
       onProductSelectionChange(oEvent) {
         const oTable = oEvent.getSource();
         const iSelectedItems = oTable.getSelectedItems().length;
-        const bProductSelected = iSelectedItems > 0;
+        const oViewModel = this.getModel("view");
 
-        this.getModel("view").setProperty("/productSelected", bProductSelected);
+        oViewModel.setProperty("/editEnabled", iSelectedItems === 1);
+        oViewModel.setProperty("/deleteEnabled", iSelectedItems > 0);
       },
 
       /**
@@ -164,7 +166,6 @@ sap.ui.define(
         const oViewModel = this.getModel("view");
         let sTitle = "";
 
-        // Reusing the same i18n keys as ListReport for consistency
         if (iCount === 0) {
           sTitle = this.i18n("tableTitleNoItems");
         } else if (iCount === 1) {
@@ -307,43 +308,60 @@ sap.ui.define(
       onDeletePress(oEvent) {
         const oModel = this.getModel();
         const oTable = this.byId("productsTable");
+        const aSelectedItems = oTable.getSelectedItems();
 
-        const oItem = oTable.getSelectedItem();
-
-        if (!oItem) {
-          return null;
+        if (aSelectedItems.length === 0) {
+          return;
         }
 
-        const oSelectedItem = oItem.getBindingContext();
-        const sDeletePath = oSelectedItem.getPath();
-
-        MessageBox.warning(
-          this.i18n("cofirmDeleteProductMessage", [
-            oSelectedItem.getProperty("Name"),
-          ]),
-          {
-            actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
-            emphasizedAction: MessageBox.Action.DELETE,
-            onClose: (sAction) => {
-              if (sAction === MessageBox.Action.DELETE) {
-                oTable.setBusy(true);
-                oModel.remove(sDeletePath, {
-                  success: () => {
-                    MessageToast.show(this.i18n("productDeletedMessage"));
-                    this.getModel("view").setProperty(
-                      "/productSelected",
-                      false
-                    );
-                  },
-                  error: () => {
-                    MessageBox.error(this.i18n("productDeleteErrorMessage"));
-                  },
-                });
-                oTable.setBusy(false);
-              }
-            },
+        // Determine message based on count
+        let sConfirmMessage = "";
+        if (aSelectedItems.length === 1) {
+          const sName = aSelectedItems[0]
+            .getBindingContext()
+            .getProperty("Name");
+          sConfirmMessage = this.i18n("cofirmDeleteProductMessage", [sName]);
+        } else {
+          // You will need to add this key to i18n, or it will show just the text
+          sConfirmMessage = this.i18n("confirmDeleteProductsPlural", [
+            aSelectedItems.length,
+          ]);
+          if (sConfirmMessage === "confirmDeleteProductsPlural") {
+            sConfirmMessage = `Delete the ${aSelectedItems.length} selected products?`; // Fallback
           }
-        );
+        }
+
+        MessageBox.warning(sConfirmMessage, {
+          actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
+          emphasizedAction: MessageBox.Action.DELETE,
+          onClose: (sAction) => {
+            if (sAction === MessageBox.Action.DELETE) {
+              oTable.setBusy(true);
+
+              // 1. Remove all items from the model
+              aSelectedItems.forEach((oItem) => {
+                const sPath = oItem.getBindingContext().getPath();
+                oModel.remove(sPath);
+              });
+
+              // 2. Submit Batch
+              oModel.submitChanges({
+                success: () => {
+                  oTable.setBusy(false);
+                  oTable.removeSelections(true);
+                  // Update view model to disable buttons
+                  this.getModel("view").setProperty("/editEnabled", false);
+                  this.getModel("view").setProperty("/deleteEnabled", false);
+                  MessageToast.show(this.i18n("productDeletedMessage"));
+                },
+                error: () => {
+                  oTable.setBusy(false);
+                  MessageBox.error(this.i18n("productDeleteErrorMessage"));
+                },
+              });
+            }
+          },
+        });
       },
 
       /**

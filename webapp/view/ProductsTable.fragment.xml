@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core"
     xmlns="sap.m">
 
-    <Table id="productsTable" items="{Products}" mode="SingleSelectLeft" selectionChange=".onProductSelectionChange" width="auto" updateFinished=".onProductsTableUpdateFinished">
+    <Table id="productsTable" items="{Products}" mode="MultiSelect" selectionChange=".onProductSelectionChange" width="auto" updateFinished=".onProductsTableUpdateFinished">
 
         <headerToolbar>
             <OverflowToolbar>
@@ -9,8 +9,8 @@
                 <ToolbarSpacer />
                 <SearchField id="productsSearchField" width="auto" search=".onProductSearch" />
 
-                <Button id="btnEditProduct" text="{i18n>edit}" icon="sap-icon://edit" enabled="{view>/productSelected}" press=".onEditPress" />
-                <Button id="btnDeleteProduct" text="{i18n>delete}" icon="sap-icon://delete" type="Transparent" enabled="{view>/productSelected}" press=".onDeletePress" />
+                <Button id="btnEditProduct" text="{i18n>edit}" icon="sap-icon://edit" enabled="{view>/editEnabled}" press=".onEditPress" />
+                <Button id="btnDeleteProduct" text="{i18n>delete}" icon="sap-icon://delete" type="Transparent" enabled="{view>/deleteEnabled}" press=".onDeletePress" />
 
             </OverflowToolbar>
         </headerToolbar>
