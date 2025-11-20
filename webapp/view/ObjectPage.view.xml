@@ -23,6 +23,7 @@
                 </uxap:heading>
 
                 <uxap:actions>
+                    <Button text="{i18n>edit}" type="Transparent" press=".onEditStore" />
                     <Button text="{i18n>delete}" type="Transparent" press=".onDeleteStore" />
                 </uxap:actions>
 

@@ -210,6 +210,71 @@ sap.ui.define(
       },
 
       /**
+       * Opens the Edit Store dialog.
+       * @public
+       */
+      async onEditStore() {
+        const oView = this.getView();
+
+        if (!this._oEditStoreDialog) {
+          oView.setBusy(true);
+          this._oEditStoreDialog = await Fragment.load({
+            id: oView.getId(),
+            name: "npproj1.view.EditStoreDialog",
+            controller: this,
+          });
+          oView.addDependent(this._oEditStoreDialog);
+          oView.setBusy(false);
+        }
+
+        this._oEditStoreDialog.open();
+      },
+
+      /**
+       * Saves the changes to the Store.
+       * @public
+       */
+      onSaveStoreEdit() {
+        if (!this._validateForm("editStoreGroup")) {
+          MessageToast.show(this.i18n("fixErrorsInForm"));
+          return;
+        }
+
+        const oModel = this.getModel();
+        this._oEditStoreDialog.setBusy(true);
+
+        oModel.submitChanges({
+          success: () => {
+            this._oEditStoreDialog.setBusy(false);
+            this._oEditStoreDialog.close();
+            MessageToast.show(this.i18n("storeUpdatedMessage"));
+          },
+          error: () => {
+            this._oEditStoreDialog.setBusy(false);
+            MessageBox.error(this.i18n("errorUpdatingStoreMessage"));
+          },
+        });
+      },
+
+      /**
+       * Cancels the edit operation and discards changes.
+       * @public
+       */
+      onCancelStoreEdit() {
+        const oModel = this.getModel();
+
+        // Get current context path to reset only this store
+        const oContext = this._oEditStoreDialog.getBindingContext();
+
+        if (oContext) {
+          oModel.resetChanges([oContext.getPath()]);
+        }
+
+        this._clearFieldGroupState("editStoreGroup");
+        this._oEditStoreDialog.close();
+      },
+
+      /**
        * Event handler for the "Delete" button press on a product item.
        * Shows a confirmation dialog before deleting the product.
        * @param {sap.ui.base.Event} oEvent - The press event object.
