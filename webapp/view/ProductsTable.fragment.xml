@@ -9,8 +9,8 @@
                 <ToolbarSpacer />
                 <SearchField id="productsSearchField" width="auto" search=".onProductSearch" />
 
-                <Button id="btnEditProduct" text="{i18n>edit}" icon="sap-icon://edit" enabled="false" press=".onEditPress" />
-                <Button id="btnDeleteProduct" text="{i18n>delete}" icon="sap-icon://delete" type="Transparent" enabled="false" press=".onDeletePress" />
+                <Button id="btnEditProduct" text="{i18n>edit}" icon="sap-icon://edit" enabled="{view>/productSelected}" press=".onEditPress" />
+                <Button id="btnDeleteProduct" text="{i18n>delete}" icon="sap-icon://delete" type="Transparent" enabled="{view>/productSelected}" press=".onDeletePress" />
 
             </OverflowToolbar>
         </headerToolbar>

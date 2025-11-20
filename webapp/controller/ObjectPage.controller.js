@@ -8,6 +8,8 @@ sap.ui.define(
     "sap/m/MessageToast",
     "sap/ui/core/Fragment",
     "sap/ui/core/Messaging",
+    "sap/ui/core/ValueState",
+    "sap/ui/model/json/JSONModel",
   ],
   (
     BaseController,
@@ -17,7 +19,9 @@ sap.ui.define(
     MessageBox,
     MessageToast,
     Fragment,
-    Messaging
+    Messaging,
+    ValueState,
+    JSONModel
   ) => {
     "use strict";
 
@@ -42,12 +46,17 @@ sap.ui.define(
        * @override
        */
       onInit() {
+        const oViewModel = new JSONModel({
+          productSelected: false,
+        });
+        this.setModel(oViewModel, "view");
+
         const oRouter = this.getRouter();
         oRouter
           .getRoute("RouteObjectPage")
           .attachPatternMatched(this._onRouteMatched, this);
 
-        this.getView().setModel(
+        this.setModel(
           sap.ui.getCore().getMessageManager().getMessageModel(),
           "message"
         );
@@ -76,15 +85,15 @@ sap.ui.define(
 
       /**
        * Unlocks the Edit/Delete buttons when a row is selected.
+       * @param {sap.ui.base.Event} oEvent - The selection change event object.
        * @public
        */
-      onProductSelectionChange: function (oEvent) {
+      onProductSelectionChange(oEvent) {
         const oTable = oEvent.getSource();
         const iSelectedItems = oTable.getSelectedItems().length;
-        const bEnabled = iSelectedItems > 0;
+        const bProductSelected = iSelectedItems > 0;
 
-        this.byId("btnEditProduct").setEnabled(bEnabled);
-        this.byId("btnDeleteProduct").setEnabled(bEnabled);
+        this.getModel("view").setProperty("/productSelected", bProductSelected);
       },
 
       /**
@@ -175,6 +184,7 @@ sap.ui.define(
       /**
        * Internal helper to execute the delete request.
        * @param {string} sPath - The path of the store to delete
+       * @param {string} sStoreName - The name of the store being deleted
        * @private
        */
       _deleteStore(sPath, sStoreName) {
@@ -208,7 +218,14 @@ sap.ui.define(
       onDeletePress(oEvent) {
         const oModel = this.getModel();
         const oTable = this.byId("productsTable");
-        const oSelectedItem = oTable.getSelectedItem().getBindingContext();
+
+        const oItem = oTable.getSelectedItem();
+
+        if (!oItem) {
+          return null;
+        }
+
+        const oSelectedItem = oItem.getBindingContext();
         const sDeletePath = oSelectedItem.getPath();
 
         MessageBox.warning(
@@ -224,6 +241,10 @@ sap.ui.define(
                 oModel.remove(sDeletePath, {
                   success: () => {
                     MessageToast.show(this.i18n("productDeletedMessage"));
+                    this.getModel("view").setProperty(
+                      "/productSelected",
+                      false
+                    );
                   },
                   error: () => {
                     MessageBox.error(this.i18n("productDeleteErrorMessage"));
@@ -283,14 +304,15 @@ sap.ui.define(
 
         oModel.submitChanges({
           success: () => {
+            this._oEditProductDialog.setBusy(false);
             this._oEditProductDialog.close();
             MessageToast.show(this.i18n("productUpdatedMessage"));
           },
           error: () => {
+            this._oEditProductDialog.setBusy(false);
             MessageBox.error(this.i18n("errorUpdatingProductMessage"));
           },
         });
-        this._oEditProductDialog.setBusy(false);
       },
 
       /**
@@ -384,10 +406,10 @@ sap.ui.define(
             }
 
             if (sErrorMessage) {
-              oInput.setValueState("Error");
+              oInput.setValueState(ValueState.Error);
               oInput.setValueStateText(sErrorMessage);
             } else if (oInput.setValueState) {
-              oInput.setValueState("None");
+              oInput.setValueState(ValueState.None);
             }
           }
         });
