@@ -1,0 +1,25 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog id="editStoreDialog" title="{i18n>editStore}" contentWidth="25rem">
+        <content>
+            <f:SimpleForm editable="true" fieldGroupIds="editStoreGroup">
+
+                <Label text="{i18n>name}" required="true" labelFor="nameInputEdit" />
+                <Input id="nameInputEdit" value="{Name}" required="true" liveChange=".onValidateInput" />
+
+                <Label text="{i18n>floorAreaWithUnit}" required="true" />
+                <Input id="floorAreaInputEdit" value="{FloorArea}" type="Number" required="true" liveChange=".onValidateInput" />
+
+                <Label text="{i18n>establishedDate}" required="true" />
+                <DatePicker id="dateInputEdit" value="{Established}" valueFormat="yyyy-MM-ddTHH:mm:ss" displayFormat="long" required="true" liveChange=".onValidateInput" />
+            </f:SimpleForm>
+        </content>
+        <beginButton>
+            <Button text="{i18n>save}" type="Emphasized" press=".onSaveStoreEdit" />
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>cancel}" press=".onCancelStoreEdit" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

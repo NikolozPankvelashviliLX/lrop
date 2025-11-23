@@ -42,7 +42,7 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
+    "flexEnabled": false,
     "dependencies": {
       "minUI5Version": "1.142.0",
       "libs": {
@@ -58,7 +58,8 @@
       "": {
         "dataSource": "mainService",
         "settings": {
-          "defaultBindingMode": "TwoWay"
+          "defaultBindingMode": "TwoWay",
+          "useBatch": true
         }
       },
       "i18n": {
@@ -91,15 +92,22 @@
         {
           "name": "RouteListReport",
           "pattern": ":?query:",
-          "target": [
-            "TargetListReport"
-          ]
+          "target": ["TargetListReport"]
+        },
+        {
+          "name": "RouteObjectPage",
+          "pattern": "StoreDetails/{StoreID}",
+          "target": ["TargetObjectPage"]
         }
       ],
       "targets": {
         "TargetListReport": {
           "id": "ListReport",
           "name": "ListReport"
+        },
+        "TargetObjectPage": {
+          "id": "ObjectPage",
+          "name": "ObjectPage"
         }
       }
     },
