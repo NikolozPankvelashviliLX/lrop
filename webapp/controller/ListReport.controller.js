@@ -411,25 +411,44 @@ sap.ui.define(
       },
 
       /**
-       * Validates an input field on live change or change.
+       * Validates an input field on change.
        * @param {sap.ui.base.Event} oEvent - The event object
        * @public
        */
-      onValidateInput(oEvent) {
-        const oInput = oEvent.getSource();
-        const sValue = oInput.getValue();
-        let sErrorMessage;
+      onValidateInput: function (oEvent) {
+        var oInput = oEvent.getSource();
+        var sErrorMessage;
+        var bDateValid = true;
 
-        if (oInput.getRequired && oInput.getRequired() && !sValue) {
-          sErrorMessage = this.i18n("fieldRequiredMessage");
-        } else if (
-          oInput.getType &&
-          oInput.getType() === "Number" &&
-          (isNaN(parseFloat(sValue)) || parseFloat(sValue) <= 0)
-        ) {
-          sErrorMessage = this.i18n("fieldMustBePositiveNumber");
+        // 1. Special Handling for DatePicker
+        // The 'change' event of DatePicker provides a 'valid' parameter.
+        if (oInput.isA("sap.m.DatePicker")) {
+          bDateValid = oEvent.getParameter("valid");
+          if (!bDateValid) {
+            // You can add "fieldInvalidDate" to your i18n file or use a hardcoded string
+            sErrorMessage =
+              this.i18n("fieldInvalidDate") || "Please enter a valid date";
+          }
         }
 
+        // 2. Standard Required Check
+        // If the date was valid (format-wise), but is empty and required:
+        if (!sErrorMessage && oInput.getRequired && oInput.getRequired()) {
+          var sValue = oInput.getValue();
+          if (!sValue) {
+            sErrorMessage = this.i18n("fieldRequiredMessage");
+          }
+        }
+
+        // 3. Number Validation (Your existing logic)
+        if (!sErrorMessage && oInput.getType && oInput.getType() === "Number") {
+          var sValue = oInput.getValue();
+          if (isNaN(parseFloat(sValue)) || parseFloat(sValue) <= 0) {
+            sErrorMessage = this.i18n("fieldMustBePositiveNumber");
+          }
+        }
+
+        // 4. Set the State
         if (sErrorMessage) {
           oInput.setValueState("Error");
           oInput.setValueStateText(sErrorMessage);

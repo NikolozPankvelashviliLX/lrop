@@ -1,5 +1,11 @@
-sap.ui.define([
-	"npproj1/test/unit/controller/ListReport.controller"
-], function () {
-	"use strict";
-});
+sap.ui.define(
+  [
+    "./model/formatter",
+    "./controller/BaseController",
+    "./controller/ListReport.controller",
+    "./controller/ObjectPage.controller",
+  ],
+  function () {
+    "use strict";
+  }
+);
