@@ -1,1 +1,36 @@
-/* Enter your custom styles here */
+/* Base Circle Style */
+.myStatusCircle {
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color: #e5e5e5;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Status Colors */
+.myStatusCircleSuccess {
+  background-color: #2b7d2b;
+  border-color: #1b4f1b;
+}
+
+.myStatusCircleWarning {
+  background-color: #e9730c;
+  border-color: #964804;
+}
+
+.myStatusCircleError {
+  background-color: #bb0000;
+  border-color: #680000;
+}
+
+/* SecretCode */
+.mySecretCode {
+  cursor: pointer;
+  color: #0064d9;
+  font-weight: bold;
+
+  font-size: 14px;
+  line-height: normal;
+  display: inline-block;
+}

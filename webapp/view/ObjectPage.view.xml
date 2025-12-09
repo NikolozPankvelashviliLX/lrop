@@ -4,7 +4,8 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:l="sap.ui.layout"
     xmlns:core="sap.ui.core"
-    xmlns:uxap="sap.uxap">
+    xmlns:uxap="sap.uxap"
+    xmlns:cc="npproj1.control">
 
     <uxap:ObjectPageLayout id="objectPageLayout" upperCaseAnchorBar="false">
 
@@ -50,7 +51,7 @@
                                 </f:SimpleForm>
                                 <f:SimpleForm layout="ResponsiveGridLayout">
                                     <Label text="{i18n>phone}" labelFor="basicInfoPhone" />
-                                    <Text id="basicInfoPhone" text="{PhoneNumber}" />
+                                    <cc:SecretCode id="basicInfoPhone" text="{PhoneNumber}" />
 
                                     <Label text="{i18n>establishedDate}" labelFor="basicInfoEstablishedDate" />
                                     <Text id="basicInfoEstablishedDate" text="{
