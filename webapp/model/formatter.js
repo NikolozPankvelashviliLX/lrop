@@ -1,4 +1,4 @@
-sap.ui.define([], function () {
+sap.ui.define([], () => {
   "use strict";
 
   return {
@@ -24,7 +24,7 @@ sap.ui.define([], function () {
       return Number(iValue).toLocaleString();
     },
 
-    formatAreaState: function (iFloorArea) {
+    formatAreaState: (iFloorArea) => {
       if (iFloorArea > 5000) {
         return "Success";
       } else if (iFloorArea > 3000) {

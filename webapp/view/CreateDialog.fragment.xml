@@ -14,7 +14,7 @@
 
 
                 <Label text="{i18n>establishedDate}" required="true" />
-                <DatePicker id="dateInput" value="{newStore>/Established}" valueFormat="yyyy-MM-ddTHH:mm:ss" displayFormat="long" required="true" liveChange=".onValidateInput" />
+                <DatePicker id="dateInput" value="{newStore>/Established}" valueFormat="yyyy-MM-ddTHH:mm:ss" displayFormat="long" required="true" change=".onValidateInput" />
             </f:SimpleForm>
         </content>
         <beginButton>

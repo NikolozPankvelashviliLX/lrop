@@ -1,1 +1,41 @@
-/* Enter your custom styles here */
+/* Base Circle Style */
+.myStatusCircle {
+  display: inline-block;
+  border-radius: 50%;
+  border: 1px solid var(--sapContent_ForegroundBorderColor);
+  background-color: var(--sapButton_Background);
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Status Colors using SAP Semantic Palette */
+.myStatusCircleSuccess {
+  background-color: var(--sapPositiveElementColor);
+  border-color: var(--sapPositiveColor);
+}
+
+.myStatusCircleWarning {
+  background-color: var(--sapCriticalElementColor);
+  border-color: var(--sapCriticalColor);
+}
+
+.myStatusCircleError {
+  background-color: var(--sapNegativeElementColor);
+  border-color: var(--sapNegativeColor);
+}
+
+/* SecretCode */
+.mySecretCode {
+  cursor: pointer;
+  color: var(--sapLinkColor);
+  font-weight: bold;
+  font-size: var(--sapFontSize);
+  line-height: normal;
+  display: inline-block;
+}
+
+/* Hover effect for SecretCode */
+.mySecretCode:hover {
+  color: var(--sapLink_Hover_Color);
+  text-decoration: underline;
+}
