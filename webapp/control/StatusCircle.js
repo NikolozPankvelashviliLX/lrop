@@ -9,8 +9,13 @@ sap.ui.define(["sap/ui/core/Control"], (Control) => {
       },
     },
 
+    /**
+     * Renders the HTML for the status circle.
+     * * @param {sap.ui.core.RenderManager} oRm The RenderManager that can be used for writing to the render output buffer.
+     * @param {sap.ui.core.Control} oControl An object representation of the control that should be rendered.
+     */
     renderer: (oRm, oControl) => {
-      var sStatus = oControl.getStatus();
+      let sStatus = oControl.getStatus();
 
       oRm.openStart("div", oControl);
 

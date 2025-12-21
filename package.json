@@ -2,6 +2,7 @@
   "name": "npproj1",
   "version": "0.0.1",
   "description": "An SAP Fiori application.",
+  "type": "module",
   "keywords": [
     "ui5",
     "openui5",
@@ -14,6 +15,7 @@
     "@sap/ux-ui5-tooling": "1",
     "@ui5/cli": "^4.0.16",
     "eslint": "^9.39.2",
+    "eslint-plugin-prefer-arrow-functions": "^3.9.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.6.2"

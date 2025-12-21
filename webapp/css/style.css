@@ -2,35 +2,40 @@
 .myStatusCircle {
   display: inline-block;
   border-radius: 50%;
-  border: 1px solid #ccc;
-  background-color: #e5e5e5;
+  border: 1px solid var(--sapContent_ForegroundBorderColor);
+  background-color: var(--sapButton_Background);
   margin-left: 0.5rem;
   vertical-align: middle;
 }
 
-/* Status Colors */
+/* Status Colors using SAP Semantic Palette */
 .myStatusCircleSuccess {
-  background-color: #2b7d2b;
-  border-color: #1b4f1b;
+  background-color: var(--sapPositiveElementColor);
+  border-color: var(--sapPositiveColor);
 }
 
 .myStatusCircleWarning {
-  background-color: #e9730c;
-  border-color: #964804;
+  background-color: var(--sapCriticalElementColor);
+  border-color: var(--sapCriticalColor);
 }
 
 .myStatusCircleError {
-  background-color: #bb0000;
-  border-color: #680000;
+  background-color: var(--sapNegativeElementColor);
+  border-color: var(--sapNegativeColor);
 }
 
 /* SecretCode */
 .mySecretCode {
   cursor: pointer;
-  color: #0064d9;
+  color: var(--sapLinkColor);
   font-weight: bold;
-
-  font-size: 14px;
+  font-size: var(--sapFontSize);
   line-height: normal;
   display: inline-block;
+}
+
+/* Hover effect for SecretCode */
+.mySecretCode:hover {
+  color: var(--sapLink_Hover_Color);
+  text-decoration: underline;
 }

@@ -18,10 +18,10 @@ sap.ui.define(["npproj1/model/formatter"], (formatter) => {
 
   QUnit.test("Should format a valid date string correctly", (assert) => {
     // Arrange
-    var sDate = "2023-12-25";
+    let sDate = "2023-12-25";
 
     // Act
-    var sResult = formatter.formatDate(sDate);
+    let sResult = formatter.formatDate(sDate);
 
     // Assert
     assert.notEqual(sResult, "", "Result is not empty");
@@ -40,12 +40,12 @@ sap.ui.define(["npproj1/model/formatter"], (formatter) => {
 
   QUnit.test("Should format a number with locale separators", (assert) => {
     // Arrange
-    var sArea = "10000";
-    var iArea = 10000;
+    let sArea = "10000";
+    let iArea = 10000;
 
     // Act & Assert
-    var sResultString = formatter.formatFloorArea(sArea);
-    var sResultNumber = formatter.formatFloorArea(iArea);
+    let sResultString = formatter.formatFloorArea(sArea);
+    let sResultNumber = formatter.formatFloorArea(iArea);
 
     assert.strictEqual(
       sResultString.length > 5,
@@ -75,8 +75,8 @@ sap.ui.define(["npproj1/model/formatter"], (formatter) => {
   });
 
   QUnit.test("Should format currency with separators", (assert) => {
-    var iValue = 5000000;
-    var sResult = formatter.formatCurrency(iValue);
+    let iValue = 5000000;
+    let sResult = formatter.formatCurrency(iValue);
 
     // Assert it creates a longer string than the input (implying separators were added)
     assert.ok(sResult.length > 7, "Currency formatted with separators");
