@@ -1,3 +1,5 @@
+/* eslint-disable no-redeclare */
+
 sap.ui.define(
   [
     "npproj1/controller/BaseController",
@@ -155,10 +157,9 @@ sap.ui.define(
        * Event handler for the filter bar's search event.
        * Gathers values from the search field and date picker,
        * creates filters, and applies them to the table binding.
-       * @param {sap.ui.base.Event} oEvent - The search event
        * @public
        */
-      onFilterBarSearch(oEvent) {
+      onFilterBarSearch() {
         const oViewModel = this.getModel("appState");
         const aFinalFilters = [];
         let iFilterCount = 0;
@@ -235,11 +236,11 @@ sap.ui.define(
        * @returns {sap.ui.model.Filter[]} An array of filter objects ready to be applied to the binding.
        * @private
        */
-      _getFiltersFromMultiInput(oMultiInput, sPath) {
+      _getFiltersFromMultiInput: (oMultiInput, sPath) => {
         const aTokens = oMultiInput.getTokens();
         const aFilters = [];
 
-        aTokens.forEach(function (oToken) {
+        aTokens.forEach((oToken) => {
           const oRangeData = oToken.data("range");
           if (oRangeData) {
             aFilters.push(

@@ -8,7 +8,7 @@ sap.ui.define(
     "sap/ui/test/matchers/Ancestor",
     "sap/ui/core/format/DateFormat",
   ],
-  function (Opa5, Common, Press, EnterText, Properties, Ancestor, DateFormat) {
+  (Opa5, Common, Press, EnterText, Properties, Ancestor, DateFormat) => {
     "use strict";
 
     var sViewName = "ListReport";
@@ -50,7 +50,7 @@ sap.ui.define(
             return this.waitFor({
               id: "dateInput",
               viewName: sViewName,
-              actions: function (oDatePicker) {
+              actions: (oDatePicker) => {
                 var oDate = new Date("2023-01-01T12:00:00");
                 var oFormat = DateFormat.getDateInstance({ style: "long" });
                 var sDateText = oFormat.format(oDate);
@@ -76,7 +76,7 @@ sap.ui.define(
             return this.waitFor({
               controlType: "sap.m.ColumnListItem",
               viewName: sViewName,
-              matchers: function (oItem) {
+              matchers: (oItem) => {
                 var oObjectIdentifier = oItem.getCells()[0];
                 return (
                   oObjectIdentifier.getTitle() === sName ||
@@ -94,7 +94,7 @@ sap.ui.define(
               viewName: sViewName,
               actions: [
                 new EnterText({ text: sName }),
-                function (oInput) {
+                (oInput) => {
                   oInput.fireSubmit();
                   var oFilterBar = oInput.getParent().getParent().getParent();
                   if (oFilterBar.search) {
@@ -110,7 +110,7 @@ sap.ui.define(
             return this.waitFor({
               id: "filterbar",
               viewName: sViewName,
-              success: function (oFilterBar) {
+              success: (oFilterBar) => {
                 oFilterBar.fireSearch();
               },
               errorMessage: "Could not trigger search",
@@ -121,7 +121,7 @@ sap.ui.define(
             return this.waitFor({
               id: "storesTable",
               viewName: sViewName,
-              actions: function (oTable) {
+              actions: (oTable) => {
                 var aItems = oTable.getItems();
                 if (aItems.length > 0) {
                   oTable.setSelectedItem(aItems[0]);
@@ -163,9 +163,9 @@ sap.ui.define(
             return this.waitFor({
               id: "storesTable",
               viewName: sViewName,
-              matchers: function (oTable) {
+              matchers: (oTable) => {
                 var aItems = oTable.getItems();
-                return aItems.some(function (oItem) {
+                return aItems.some((oItem) => {
                   var oObjectIdentifier = oItem.getCells()[0];
                   return (
                     oObjectIdentifier.getTitle() === sName ||
@@ -173,7 +173,7 @@ sap.ui.define(
                   );
                 });
               },
-              success: function () {
+              success: () => {
                 Opa5.assert.ok(
                   true,
                   "The store " + sName + " is displayed in the list"
@@ -187,9 +187,9 @@ sap.ui.define(
             return this.waitFor({
               id: "storesTable",
               viewName: sViewName,
-              check: function (oTable) {
+              check: (oTable) => {
                 var aItems = oTable.getItems();
-                var bFound = aItems.some(function (oItem) {
+                var bFound = aItems.some((oItem) => {
                   var oObjectIdentifier = oItem.getCells()[0];
                   return (
                     oObjectIdentifier.getTitle() === sName ||
@@ -198,7 +198,7 @@ sap.ui.define(
                 });
                 return !bFound;
               },
-              success: function () {
+              success: () => {
                 Opa5.assert.ok(
                   true,
                   "The store " + sName + " was successfully deleted"

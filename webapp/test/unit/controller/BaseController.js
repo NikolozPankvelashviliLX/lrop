@@ -1,11 +1,7 @@
-/*global QUnit, sinon*/
+/*global sinon*/
 sap.ui.define(
-  [
-    "npproj1/controller/BaseController",
-    "sap/ui/core/UIComponent",
-    "sap/ui/core/mvc/Controller",
-  ],
-  function (BaseController, UIComponent, Controller) {
+  ["npproj1/controller/BaseController", "sap/ui/core/UIComponent"],
+  (BaseController, UIComponent) => {
     "use strict";
 
     QUnit.module("BaseController", {

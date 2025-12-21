@@ -202,14 +202,12 @@ sap.ui.define(
       /**
        * Event handler for the "Delete" button press on a product item.
        * Shows a confirmation dialog before deleting the product.
-       * @param {sap.ui.base.Event} oEvent - The press event object.
        * @public
        */
-      onDeletePress(oEvent) {
+      onDeletePress() {
         const oModel = this.getModel();
         const oTable = this.byId("productsTable");
         const oSelectedItem = oTable.getSelectedItem().getBindingContext();
-        debugger;
         const sDeletePath = oSelectedItem.getPath();
 
         MessageBox.warning(
@@ -241,10 +239,9 @@ sap.ui.define(
        * Event handler for the "Edit" button press on a product item.
        * Lazily loads and opens the "EditProductDialog" fragment.
        * Binds the dialog to the context of the product to be edited.
-       * @param {sap.ui.base.Event} oEvent - The press event object.
        * @public
        */
-      async onEditPress(oEvent) {
+      async onEditPress() {
         const oView = this.getView();
         const oTable = this.byId("productsTable");
         const oSelectedItem = oTable.getSelectedItem();

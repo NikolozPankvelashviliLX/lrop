@@ -1,7 +1,7 @@
-/*global QUnit, sinon*/
+/*global  sinon*/
 sap.ui.define(
-  ["npproj1/controller/ObjectPage.controller", "sap/ui/model/FilterOperator"],
-  function (ObjectPageController, FilterOperator) {
+  ["npproj1/controller/ObjectPage.controller"],
+  (ObjectPageController) => {
     "use strict";
 
     QUnit.module("ObjectPage Controller Logic", {

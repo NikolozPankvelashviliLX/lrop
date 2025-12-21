@@ -7,7 +7,7 @@ sap.ui.define(
     "./control/StatusCircle",
     "./control/SecretCode",
   ],
-  function () {
+  () => {
     "use strict";
   }
 );

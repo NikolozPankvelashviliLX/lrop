@@ -1,10 +1,9 @@
-/*global QUnit*/
-sap.ui.define(["npproj1/control/SecretCode"], function (SecretCode) {
+sap.ui.define(["npproj1/control/SecretCode"], (SecretCode) => {
   "use strict";
 
   QUnit.module("SecretCode Control");
 
-  QUnit.test("Should toggle visibility on tap", function (assert) {
+  QUnit.test("Should toggle visibility on tap", (assert) => {
     var oControl = new SecretCode({
       text: "555-1234",
     });

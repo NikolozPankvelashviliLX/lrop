@@ -1,6 +1,6 @@
 sap.ui.define(
   ["sap/ui/test/opaQunit", "./pages/ListReport", "./pages/ObjectPage"],
-  function (opaTest) {
+  (opaTest) => {
     "use strict";
 
     var sNewStoreName = "OpaTest Store " + new Date().getTime();
@@ -10,7 +10,7 @@ sap.ui.define(
 
     opaTest(
       "Should create a new product and verify data",
-      function (Given, When, Then) {
+      (Given, When, Then) => {
         // 1. Start App
         Given.iStartMyApp();
 
@@ -28,7 +28,7 @@ sap.ui.define(
       }
     );
 
-    opaTest("Should go back, search and delete", function (Given, When, Then) {
+    opaTest("Should go back, search and delete", (Given, When, Then) => {
       // 5. Go Back
       When.onTheObjectPage.iPressTheBackButton();
 

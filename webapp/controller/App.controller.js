@@ -4,7 +4,7 @@ sap.ui.define([
   "use strict";
 
   return BaseController.extend("npproj1.controller.App", {
-      onInit() {
+      onInit: () => {
       }
   });
 });

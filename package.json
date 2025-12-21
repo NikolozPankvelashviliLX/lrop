@@ -9,9 +9,13 @@
   ],
   "main": "webapp/index.html",
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@prettier/plugin-xml": "^3.4.2",
     "@sap/ux-ui5-tooling": "1",
     "@ui5/cli": "^4.0.16",
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.6.2"
   },
   "scripts": {
@@ -23,7 +27,15 @@
     "start-noflp": "fiori run --open \"/index.html?sap-ui-xx-viewCache=false\"",
     "int-test": "fiori run --open \"test/integration/opaTests.qunit.html\"",
     "start-variants-management": "fiori run --open \"/preview.html#app-preview\"",
-    "unit-test": "fiori run --open \"test/unit/unitTests.qunit.html\""
+    "unit-test": "fiori run --open \"test/unit/unitTests.qunit.html\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "webapp/**/*.js": [
+      "eslint --fix"
+    ]
   },
   "sapuxLayer": "CUSTOMER_BASE"
 }

@@ -1,10 +1,9 @@
-/* global QUnit */
 QUnit.config.autostart = false;
 
-sap.ui.getCore().attachInit(function () {
+sap.ui.getCore().attachInit(() => {
   "use strict";
 
-  sap.ui.require(["npproj1/test/integration/AllJourneys"], function () {
+  sap.ui.require(["npproj1/test/integration/AllJourneys"], () => {
     QUnit.start();
   });
 });

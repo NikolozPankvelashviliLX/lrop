@@ -5,7 +5,7 @@ sap.ui.define(
     "sap/ui/test/actions/Press",
     "sap/ui/test/matchers/Properties",
   ],
-  function (Opa5, Common, Press, Properties) {
+  (Opa5, Common, Press, Properties) => {
     "use strict";
 
     var sViewName = "ObjectPage";
@@ -34,7 +34,7 @@ sap.ui.define(
               matchers: new Properties({
                 text: sTitle,
               }),
-              success: function () {
+              success: () => {
                 Opa5.assert.ok(
                   true,
                   "The Object Page title is correct: " + sTitle

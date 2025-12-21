@@ -1,4 +1,4 @@
-sap.ui.define(["sap/ui/core/Control"], function (Control) {
+sap.ui.define(["sap/ui/core/Control"], (Control) => {
   "use strict";
 
   return Control.extend("npproj1.control.StatusCircle", {
@@ -9,7 +9,7 @@ sap.ui.define(["sap/ui/core/Control"], function (Control) {
       },
     },
 
-    renderer: function (oRm, oControl) {
+    renderer: (oRm, oControl) => {
       var sStatus = oControl.getStatus();
 
       oRm.openStart("div", oControl);

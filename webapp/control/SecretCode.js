@@ -1,4 +1,4 @@
-sap.ui.define(["sap/ui/core/Control"], function (Control) {
+sap.ui.define(["sap/ui/core/Control"], (Control) => {
   "use strict";
 
   return Control.extend("npproj1.control.SecretCode", {
@@ -12,7 +12,7 @@ sap.ui.define(["sap/ui/core/Control"], function (Control) {
       this._bRevealed = false;
     },
 
-    renderer: function (oRm, oControl) {
+    renderer: (oRm, oControl) => {
       oRm.openStart("span", oControl);
       oRm.class("mySecretCode");
 

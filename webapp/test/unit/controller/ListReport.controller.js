@@ -1,11 +1,11 @@
-/*global QUnit, sinon*/
+/*global sinon*/
 sap.ui.define(
   [
     "npproj1/controller/ListReport.controller",
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/FilterOperator",
   ],
-  function (ListReportController, JSONModel, FilterOperator) {
+  (ListReportController, JSONModel, FilterOperator) => {
     "use strict";
 
     QUnit.module("ListReport Controller Logic", {
